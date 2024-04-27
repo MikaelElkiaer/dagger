@@ -1,3 +1,5 @@
+﻿using CodegenCS;
+using CodegenCS.IO;
 using DaggerSDK.GraphQL.Client;
 using DaggerSDK.CodeGen;
 using DaggerSDK.CodeGen.Models;
@@ -27,3 +29,16 @@ File.WriteAllText("introspect-parsed.json", JsonSerializer.Serialize(model, opt)
 
 Console.WriteLine("Directives extracted: {0}", model.Directives.Count());
 Console.WriteLine("Types extracted: {0}", model.Types.Count());
+
+var ctx = new CodegenContext();
+new Dagger(ctx, model).Template();
+
+if (ctx.OutputFiles.Count > 0 && ctx.Errors.Count == 0)
+{
+    string outputFolder = Path.Combine(GetCurrentFolder(), "..", @"DaggerSDK.Client");
+    if (Directory.Exists(outputFolder))
+        Directory.GetFiles(outputFolder, "*.generated.cs", SearchOption.AllDirectories).ToList().ForEach(path => File.Delete(path));
+    ctx.SaveToFolder(outputFolder);
+}
+
+static string GetCurrentFolder([CallerFilePath] string? path = null) => Path.GetDirectoryName(path) ?? "";

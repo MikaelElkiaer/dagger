@@ -8,4 +8,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DaggerSDK.GraphQL\DaggerSDK.GraphQL.csproj"></ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CodegenCS.Core" Version="3.3.1"></PackageReference>
+    <PackageReference Include="CodegenCS.Runtime" Version="3.1.1"></PackageReference>
+  </ItemGroup>
 </Project>

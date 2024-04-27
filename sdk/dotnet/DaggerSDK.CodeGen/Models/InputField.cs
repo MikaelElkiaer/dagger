@@ -1,6 +1,6 @@
-﻿namespace DaggerSDKCodeGen.Models;
+﻿namespace DaggerSDK.CodeGen.Models;
 
-public class QueryArg
+public class InputField
 {
     public string? DefaultValue { get; set; }
     public string? Description { get; set; }

@@ -1,7 +1,6 @@
-﻿using DaggerSDK.GraphQL;
-using DaggerSDK.GraphQL.QueryElements;
+﻿using DaggerSDK.GraphQL.QueryElements;
 
-namespace DaggerSDK;
+namespace DaggerSDK.GraphQL;
 
 public class ContainerBuilder
 {

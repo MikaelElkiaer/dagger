@@ -1,7 +1,7 @@
-﻿using DaggerSDK;
+﻿using DaggerSDK.GraphQL;
 using DaggerSDK.GraphQL.QueryElements;
 
-namespace IntegrationTests.TestData;
+namespace DaggerSDK.IntegrationTests.TestData;
 
 // taken from: 
 public class LaravelExample

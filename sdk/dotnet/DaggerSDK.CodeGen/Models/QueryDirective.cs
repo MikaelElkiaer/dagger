@@ -1,4 +1,4 @@
-﻿namespace DaggerSDKCodeGen.Models;
+﻿namespace DaggerSDK.CodeGen.Models;
 
 public class QueryDirective
 {

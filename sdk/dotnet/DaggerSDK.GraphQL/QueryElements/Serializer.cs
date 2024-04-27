@@ -1,10 +1,7 @@
 ﻿using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
-using DaggerSDK.GraphQL.QueryElements;
 
-namespace DaggerSDK.GraphQL;
+namespace DaggerSDK.GraphQL.QueryElements;
 
 public class Serializer
 {
@@ -39,7 +36,7 @@ public class Serializer
         {
             result.Append(element.Label).Append(": ");
         }
-        
+
         result.Append(element.Name);
         AddArgs(result, element.Params);
 

@@ -1,8 +1,9 @@
-﻿using DaggerSDK.GraphQL;
-using IntegrationTests.TestData;
+﻿using DaggerSDK.GraphQL.Client;
+using DaggerSDK.GraphQL.QueryElements;
+using DaggerSDK.IntegrationTests.TestData;
 using Newtonsoft.Json;
 
-namespace IntegrationTests;
+namespace DaggerSDK.IntegrationTests;
 
 public class BasicTests
 {

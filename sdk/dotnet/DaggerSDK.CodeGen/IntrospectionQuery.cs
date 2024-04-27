@@ -1,4 +1,4 @@
-﻿namespace DaggerSDKCodeGen;
+﻿namespace DaggerSDK.CodeGen;
 
 internal class IntrospectionQuery
 {

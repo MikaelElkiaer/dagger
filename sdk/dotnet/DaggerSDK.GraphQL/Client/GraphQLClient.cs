@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
 
-namespace DaggerSDK.GraphQL;
+namespace DaggerSDK.GraphQL.Client;
 
 public class GraphQLClient
 {

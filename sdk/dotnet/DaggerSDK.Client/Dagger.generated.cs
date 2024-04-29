@@ -4,76 +4,76 @@ using System = global::System;
 
 namespace DaggerSDK.Client;
 
-    public partial class Dagger
-    {
+public partial class Dagger
+{
 
-    }
+}
 
-    public class Container
-    {
-            public Container AsService() => throw new NotImplemented();
-            public Container AsTarball() => throw new NotImplemented();
-            public Container Build() => throw new NotImplemented();
-            public Container DefaultArgs() => throw new NotImplemented();
-            public Container Directory() => throw new NotImplemented();
-            public Container Entrypoint() => throw new NotImplemented();
-            public Container EnvVariable() => throw new NotImplemented();
-            public Container EnvVariables() => throw new NotImplemented();
-            public Container ExperimentalWithAllGPUs() => throw new NotImplemented();
-            public Container ExperimentalWithGPU() => throw new NotImplemented();
-            public Container Export() => throw new NotImplemented();
-            public Container ExposedPorts() => throw new NotImplemented();
-            public Container File() => throw new NotImplemented();
-            public Container From() => throw new NotImplemented();
-            public Container Id() => throw new NotImplemented();
-            public Container ImageRef() => throw new NotImplemented();
-            public Container Import() => throw new NotImplemented();
-            public Container Label() => throw new NotImplemented();
-            public Container Labels() => throw new NotImplemented();
-            public Container Mounts() => throw new NotImplemented();
-            public Container Pipeline() => throw new NotImplemented();
-            public Container Platform() => throw new NotImplemented();
-            public Container Publish() => throw new NotImplemented();
-            public Container Rootfs() => throw new NotImplemented();
-            public Container Stderr() => throw new NotImplemented();
-            public Container Stdout() => throw new NotImplemented();
-            public Container Sync() => throw new NotImplemented();
-            public Container Terminal() => throw new NotImplemented();
-            public Container User() => throw new NotImplemented();
-            public Container WithDefaultArgs() => throw new NotImplemented();
-            public Container WithDefaultTerminalCmd() => throw new NotImplemented();
-            public Container WithDirectory() => throw new NotImplemented();
-            public Container WithEntrypoint() => throw new NotImplemented();
-            public Container WithEnvVariable() => throw new NotImplemented();
-            public Container WithExec() => throw new NotImplemented();
-            public Container WithExposedPort() => throw new NotImplemented();
-            public Container WithFile() => throw new NotImplemented();
-            public Container WithFiles() => throw new NotImplemented();
-            public Container WithFocus() => throw new NotImplemented();
-            public Container WithLabel() => throw new NotImplemented();
-            public Container WithMountedCache() => throw new NotImplemented();
-            public Container WithMountedDirectory() => throw new NotImplemented();
-            public Container WithMountedFile() => throw new NotImplemented();
-            public Container WithMountedSecret() => throw new NotImplemented();
-            public Container WithMountedTemp() => throw new NotImplemented();
-            public Container WithNewFile() => throw new NotImplemented();
-            public Container WithRegistryAuth() => throw new NotImplemented();
-            public Container WithRootfs() => throw new NotImplemented();
-            public Container WithSecretVariable() => throw new NotImplemented();
-            public Container WithServiceBinding() => throw new NotImplemented();
-            public Container WithUnixSocket() => throw new NotImplemented();
-            public Container WithUser() => throw new NotImplemented();
-            public Container WithWorkdir() => throw new NotImplemented();
-            public Container WithoutDefaultArgs() => throw new NotImplemented();
-            public Container WithoutEntrypoint() => throw new NotImplemented();
-            public Container WithoutEnvVariable() => throw new NotImplemented();
-            public Container WithoutExposedPort() => throw new NotImplemented();
-            public Container WithoutFocus() => throw new NotImplemented();
-            public Container WithoutLabel() => throw new NotImplemented();
-            public Container WithoutMount() => throw new NotImplemented();
-            public Container WithoutRegistryAuth() => throw new NotImplemented();
-            public Container WithoutUnixSocket() => throw new NotImplemented();
-            public Container WithoutUser() => throw new NotImplemented();
-            public Container WithoutWorkdir() => throw new NotImplemented();
-            public Container Workdir() => throw new NotImplemented();
-    }
+public class Container
+{
+    public Container AsService() => throw new NotImplemented();
+    public Container AsTarball() => throw new NotImplemented();
+    public Container Build() => throw new NotImplemented();
+    public Container DefaultArgs() => throw new NotImplemented();
+    public Container Directory() => throw new NotImplemented();
+    public Container Entrypoint() => throw new NotImplemented();
+    public Container EnvVariable() => throw new NotImplemented();
+    public Container EnvVariables() => throw new NotImplemented();
+    public Container ExperimentalWithAllGPUs() => throw new NotImplemented();
+    public Container ExperimentalWithGPU() => throw new NotImplemented();
+    public Container Export() => throw new NotImplemented();
+    public Container ExposedPorts() => throw new NotImplemented();
+    public Container File() => throw new NotImplemented();
+    public Container From() => throw new NotImplemented();
+    public Container Id() => throw new NotImplemented();
+    public Container ImageRef() => throw new NotImplemented();
+    public Container Import() => throw new NotImplemented();
+    public Container Label() => throw new NotImplemented();
+    public Container Labels() => throw new NotImplemented();
+    public Container Mounts() => throw new NotImplemented();
+    public Container Pipeline() => throw new NotImplemented();
+    public Container Platform() => throw new NotImplemented();
+    public Container Publish() => throw new NotImplemented();
+    public Container Rootfs() => throw new NotImplemented();
+    public Container Stderr() => throw new NotImplemented();
+    public Container Stdout() => throw new NotImplemented();
+    public Container Sync() => throw new NotImplemented();
+    public Container Terminal() => throw new NotImplemented();
+    public Container User() => throw new NotImplemented();
+    public Container WithDefaultArgs() => throw new NotImplemented();
+    public Container WithDefaultTerminalCmd() => throw new NotImplemented();
+    public Container WithDirectory() => throw new NotImplemented();
+    public Container WithEntrypoint() => throw new NotImplemented();
+    public Container WithEnvVariable() => throw new NotImplemented();
+    public Container WithExec() => throw new NotImplemented();
+    public Container WithExposedPort() => throw new NotImplemented();
+    public Container WithFile() => throw new NotImplemented();
+    public Container WithFiles() => throw new NotImplemented();
+    public Container WithFocus() => throw new NotImplemented();
+    public Container WithLabel() => throw new NotImplemented();
+    public Container WithMountedCache() => throw new NotImplemented();
+    public Container WithMountedDirectory() => throw new NotImplemented();
+    public Container WithMountedFile() => throw new NotImplemented();
+    public Container WithMountedSecret() => throw new NotImplemented();
+    public Container WithMountedTemp() => throw new NotImplemented();
+    public Container WithNewFile() => throw new NotImplemented();
+    public Container WithRegistryAuth() => throw new NotImplemented();
+    public Container WithRootfs() => throw new NotImplemented();
+    public Container WithSecretVariable() => throw new NotImplemented();
+    public Container WithServiceBinding() => throw new NotImplemented();
+    public Container WithUnixSocket() => throw new NotImplemented();
+    public Container WithUser() => throw new NotImplemented();
+    public Container WithWorkdir() => throw new NotImplemented();
+    public Container WithoutDefaultArgs() => throw new NotImplemented();
+    public Container WithoutEntrypoint() => throw new NotImplemented();
+    public Container WithoutEnvVariable() => throw new NotImplemented();
+    public Container WithoutExposedPort() => throw new NotImplemented();
+    public Container WithoutFocus() => throw new NotImplemented();
+    public Container WithoutLabel() => throw new NotImplemented();
+    public Container WithoutMount() => throw new NotImplemented();
+    public Container WithoutRegistryAuth() => throw new NotImplemented();
+    public Container WithoutUnixSocket() => throw new NotImplemented();
+    public Container WithoutUser() => throw new NotImplemented();
+    public Container WithoutWorkdir() => throw new NotImplemented();
+    public Container Workdir() => throw new NotImplemented();
+}

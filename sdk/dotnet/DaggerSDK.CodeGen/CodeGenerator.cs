@@ -45,14 +45,14 @@ public class CodeGenerator
             {
 
             }
-        """;
+            """;
 
         internal static Func<ICodegenContext, CodeGenerator, QuerySchema, FormattableString> ContainerClass = (ctx, template, model) => $$"""
             public class Container
             {
                 {{ContainerMethods(ctx, template, model)}}
             }
-        """;
+            """;
 
         static IEnumerable<FormattableString> ContainerMethods(ICodegenContext ctx, CodeGenerator template, QuerySchema model)
         {
@@ -60,7 +60,7 @@ public class CodeGenerator
             foreach (var f in fields!)
                 yield return $$"""
                     public Container {{PascalCase(f.Name!)}}() => throw new NotImplemented();
-                """;
+                    """;
         }
 
         static string PascalCase(string input) => input.Substring(0, 1).ToUpper() + input.Substring(1);

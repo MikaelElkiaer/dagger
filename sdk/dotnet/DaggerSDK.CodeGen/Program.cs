@@ -31,7 +31,7 @@ Console.WriteLine("Directives extracted: {0}", model.Directives.Count());
 Console.WriteLine("Types extracted: {0}", model.Types.Count());
 
 var ctx = new CodegenContext();
-new Dagger(ctx, model).Template();
+new CodeGenerator(ctx, model).Template();
 
 if (ctx.OutputFiles.Count > 0 && ctx.Errors.Count == 0)
 {

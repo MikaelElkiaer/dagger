@@ -59,7 +59,7 @@ public class CodeGenerator
             var fields = model.Types?.First(t => string.Equals(t.Name, "container", StringComparison.InvariantCultureIgnoreCase)).Fields;
             foreach (var f in fields!)
                 yield return $$"""
-                    public Container {{PascalCase(f.Name!)}}() => throw new NotImplemented();
+                    public Container {{PascalCase(f.Name!)}}() => throw new NotImplementedException();
                     """;
         }
 

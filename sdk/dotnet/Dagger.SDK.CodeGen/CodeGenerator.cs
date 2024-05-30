@@ -1,4 +1,3 @@
-using System.Text;
 using CodegenCS;
 using Dagger.SDK.CodeGen.Models;
 
@@ -33,7 +32,7 @@ public class CodeGenerator
 
             {{Gen.Class}}
 
-            {{Gen.ContainerClass}}
+            {{Gen.Spec}}
             """);
     }
 
@@ -47,22 +46,115 @@ public class CodeGenerator
             }
             """;
 
-        internal static Func<ICodegenContext, CodeGenerator, QuerySchema, FormattableString> ContainerClass = (ctx, template, model) => $$"""
-            public class Container
-            {
-                {{ContainerMethods(ctx, template, model)}}
-            }
+        internal static Func<ICodegenContext, CodeGenerator, QuerySchema, FormattableString> Spec = (ctx, template, model) => $$"""
+            {{Types(model.Types!)}}
             """;
 
-        static IEnumerable<FormattableString> ContainerMethods(ICodegenContext ctx, CodeGenerator template, QuerySchema model)
+        private static IEnumerable<FormattableString> Types(IEnumerable<QueryType> types) => types.Select(t => (FormattableString)$$"""
+            /// <summary>
+            /// {{t.Description!.Replace("\n\n", " ")}}
+            /// </summary>
+            public {{Kind(t.Kind!)}} {{PascalCase(t.Name!)}}
+            {
+                {{EnumValues(t.EnumValues)}}
+                {{Methods(t.Fields)}}
+                {{Fields(t.InputFields)}}
+                {{Struct(t)}}
+            }
+            """);
+
+        private static string Kind(string kind) =>
+            kind switch
+            {
+                "INTERFACE" => "interface",
+                "ENUM" => "enum",
+                "SCALAR" => "struct",
+                _ => "class"
+            };
+
+        private static IEnumerable<FormattableString>? EnumValues(EnumType[]? enumValues) => enumValues?.Select(e => (FormattableString)$$"""
+            // {{e.Description!.Replace("\n\n", " ")}}
+            {{e.Name}},
+            """);
+
+        private static IEnumerable<FormattableString>? Methods(IEnumerable<QueryField>? methods) => methods?.Select(m => (FormattableString)$$"""
+            /// <summary>
+            /// {{m.Description!.Replace("\n\n", " ")}}
+            /// </summary>
+            {{ParameterDocs(m.Args!)}}
+            public {{TypeDef(m.Type)}} {{PascalCase(m.Name!)}}({{Parameters(m.Args!).RenderAsSingleLineCSV()}}{{Symbols.TTW}}) => throw new NotImplementedException();
+            """);
+
+        private static IEnumerable<FormattableString>? Fields(InputField[]? inputFields) => inputFields?.Select(f => (FormattableString)$$"""
+            /// <summary>
+            /// {{f.Description!.Replace("\n\n", " ")}}
+            /// </summary>
+            public {{TypeDef(f.Type)}} {{PascalCase(f.Name!)}};
+            """);
+
+        private static IEnumerable<FormattableString>? Struct(QueryType t)
         {
-            var fields = model.Types?.First(t => string.Equals(t.Name, "container", StringComparison.InvariantCultureIgnoreCase)).Fields;
-            foreach (var f in fields!)
-                yield return $$"""
-                    public Container {{PascalCase(f.Name!)}}() => throw new NotImplementedException();
-                    """;
+            if (t.Kind != "SCALAR")
+                yield break;
+
+            var wrapper = t.Name;
+            var wrappee = t switch
+            {
+                var tt when tt.Name == "Int" => "int",
+                var tt when tt.Name == "Boolean" => "bool",
+                _ => "string"
+            };
+
+            yield return $$"""
+                public {{wrappee}} Value { get; init; }
+                public static implicit operator {{wrappee}}({{wrapper}} value) => value.Value;
+                public static implicit operator {{wrapper}}({{wrappee}} value) => new() { Value = value };
+                """;
         }
 
-        static string PascalCase(string input) => input.Substring(0, 1).ToUpper() + input.Substring(1);
+        private static IEnumerable<FormattableString>? ParameterDocs(QueryArg[]? fields) => fields?.Select(f => (FormattableString)$$"""
+            /// <param name="{{f.Name}}">{{f.Description!.Replace("\n\n", " ")}}</param>
+            """);
+
+        private static string PascalCase(string input) => input.Substring(0, 1).ToUpper() + input.Substring(1);
+
+        private static IEnumerable<string> Parameters(QueryArg[] args) => args.Select(a =>
+            $"{TypeDef(a.Type)}{Nullable(a.Type)} {a.Name ?? ".err"}{DefaultValue(a.Type, a.DefaultValue)}");
+
+        private static string Nullable(TypeDef? type) =>
+            type?.Kind == "LIST" ? "?" : "";
+
+        private static string? TypeDef(TypeDef? type) =>
+            type?.Kind switch
+            {
+                "NON_NULL" => TypeDef(type.OfType),
+                "LIST" => $"IEnumerable<{TypeDef(type.OfType)}>",
+                "SCALAR" => type.Name switch
+                {
+                    "String" => "string",
+                    "Int" => "int",
+                    "Boolean" => "bool",
+                    _ => type.Name
+                },
+                _ => type?.Name ?? TypeDef(type?.OfType)
+            };
+
+        private static string? DefaultValue(TypeDef? type, string? defaultValue)
+        {
+            if (type is null || defaultValue is null)
+                return null;
+
+            var actualType = type.Kind == "NON_NULL" ? type.OfType : type;
+            var actualValue = type switch
+            {
+                var t when t.Kind == "SCALAR" && t.Name == "Boolean" && defaultValue == "True" => "true",
+                var t when t.Kind == "SCALAR" && t.Name == "Boolean" && defaultValue == "False" => "false",
+                var t when t.Kind == "LIST" => "null",
+                var t when t.Kind == "ENUM" => t.Name + "." + defaultValue,
+                _ => defaultValue
+            };
+
+            return $" = {actualValue}";
+        }
     }
 }

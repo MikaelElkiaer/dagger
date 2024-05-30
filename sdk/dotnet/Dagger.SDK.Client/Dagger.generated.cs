@@ -9,71 +9,2999 @@ public partial class Dagger
 
 }
 
+/// <summary>
+/// The `Boolean` scalar type represents `true` or `false`.
+/// </summary>
+public struct Boolean
+{
+    public bool Value { get; init; }
+    public static implicit operator bool(Boolean value) => value.Value;
+    public static implicit operator Boolean(bool value) => new() { Value = value };
+}
+
+/// <summary>
+/// Key value object that represents a build argument.
+/// </summary>
+public class BuildArg
+{
+    /// <summary>
+    /// The build argument name.
+    /// </summary>
+    public string Name;
+
+    /// <summary>
+    /// The build argument value.
+    /// </summary>
+    public string Value;
+}
+
+/// <summary>
+/// Sharing mode of the cache volume.
+/// </summary>
+public enum CacheSharingMode
+{
+    // Shares the cache volume amongst many build pipelines
+    SHARED,
+
+    // Keeps a cache volume for a single build pipeline
+    PRIVATE,
+
+    // Shares the cache volume amongst many build pipelines, but will serialize the writes
+    LOCKED,
+}
+
+/// <summary>
+/// A directory whose contents persist across runs.
+/// </summary>
+public class CacheVolume
+{
+    /// <summary>
+    /// A unique identifier for this CacheVolume.
+    /// </summary>
+    public CacheVolumeID Id() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `CacheVolumeID` scalar type represents an identifier for an object of type CacheVolume.
+/// </summary>
+public struct CacheVolumeID
+{
+    public string Value { get; init; }
+    public static implicit operator string(CacheVolumeID value) => value.Value;
+    public static implicit operator CacheVolumeID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// An OCI-compatible container, also known as a Docker container.
+/// </summary>
 public class Container
 {
-    public Container AsService() => throw new NotImplementedException();
-    public Container AsTarball() => throw new NotImplementedException();
-    public Container Build() => throw new NotImplementedException();
-    public Container DefaultArgs() => throw new NotImplementedException();
-    public Container Directory() => throw new NotImplementedException();
-    public Container Entrypoint() => throw new NotImplementedException();
-    public Container EnvVariable() => throw new NotImplementedException();
-    public Container EnvVariables() => throw new NotImplementedException();
+    /// <summary>
+    /// Turn the container into a Service. Be sure to set any exposed ports before this conversion.
+    /// </summary>
+    public Service AsService() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a File representing the container serialized to a tarball.
+    /// </summary>
+    /// <param name="platformVariants">Identifiers for other platform specific containers. Used for multi-platform images.</param>
+    /// <param name="forcedCompression">Force each layer of the image to use the specified compression algorithm. If this is unset, then if a layer already has a compressed blob in the engine's cache, that will be used (this can result in a mix of compression algorithms for different layers). If this is unset and a layer has no compressed blob in the engine's cache, then it will be compressed using Gzip.</param>
+    /// <param name="mediaTypes">Use the specified media types for the image's layers. Defaults to OCI, which is largely compatible with most recent container runtimes, but Docker may be needed for older runtimes without OCI support.</param>
+    public File AsTarball(IEnumerable<ContainerID>? platformVariants = null, ImageLayerCompression forcedCompression, ImageMediaTypes mediaTypes = ImageMediaTypes.OCIMediaTypes) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Initializes this container from a Dockerfile build.
+    /// </summary>
+    /// <param name="context">Directory context used by the Dockerfile.</param>
+    /// <param name="dockerfile">Path to the Dockerfile to use.</param>
+    /// <param name="target">Target build stage to build.</param>
+    /// <param name="buildArgs">Additional build arguments.</param>
+    /// <param name="secrets">Secrets to pass to the build. They will be mounted at /run/secrets/[secret-name] in the build container They can be accessed in the Dockerfile using the "secret" mount type and mount path /run/secrets/[secret-name], e.g. RUN --mount=type=secret,id=my-secret curl [http://example.com?token=$(cat /run/secrets/my-secret)](http://example.com?token=$(cat /run/secrets/my-secret))</param>
+    public Container Build(DirectoryID context, string dockerfile = "Dockerfile", string target = "", IEnumerable<BuildArg>? buildArgs = null, IEnumerable<SecretID>? secrets = null) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves default arguments for future commands.
+    /// </summary>
+    public IEnumerable<string> DefaultArgs() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves a directory at the given path. Mounts are included.
+    /// </summary>
+    /// <param name="path">The path of the directory to retrieve (e.g., "./src").</param>
+    public Directory Directory(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves entrypoint to be prepended to the arguments of all commands.
+    /// </summary>
+    public IEnumerable<string> Entrypoint() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the value of the specified environment variable.
+    /// </summary>
+    /// <param name="name">The name of the environment variable to retrieve (e.g., "PATH").</param>
+    public string EnvVariable(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the list of environment variables passed to commands.
+    /// </summary>
+    public IEnumerable<EnvVariable> EnvVariables() => throw new NotImplementedException();
+
+    /// <summary>
+    /// EXPERIMENTAL API! Subject to change/removal at any time. Configures all available GPUs on the host to be accessible to this container. This currently works for Nvidia devices only.
+    /// </summary>
     public Container ExperimentalWithAllGPUs() => throw new NotImplementedException();
-    public Container ExperimentalWithGPU() => throw new NotImplementedException();
-    public Container Export() => throw new NotImplementedException();
-    public Container ExposedPorts() => throw new NotImplementedException();
-    public Container File() => throw new NotImplementedException();
-    public Container From() => throw new NotImplementedException();
-    public Container Id() => throw new NotImplementedException();
-    public Container ImageRef() => throw new NotImplementedException();
-    public Container Import() => throw new NotImplementedException();
-    public Container Label() => throw new NotImplementedException();
-    public Container Labels() => throw new NotImplementedException();
-    public Container Mounts() => throw new NotImplementedException();
-    public Container Pipeline() => throw new NotImplementedException();
-    public Container Platform() => throw new NotImplementedException();
-    public Container Publish() => throw new NotImplementedException();
-    public Container Rootfs() => throw new NotImplementedException();
-    public Container Stderr() => throw new NotImplementedException();
-    public Container Stdout() => throw new NotImplementedException();
-    public Container Sync() => throw new NotImplementedException();
-    public Container Terminal() => throw new NotImplementedException();
-    public Container User() => throw new NotImplementedException();
-    public Container WithDefaultArgs() => throw new NotImplementedException();
-    public Container WithDefaultTerminalCmd() => throw new NotImplementedException();
-    public Container WithDirectory() => throw new NotImplementedException();
-    public Container WithEntrypoint() => throw new NotImplementedException();
-    public Container WithEnvVariable() => throw new NotImplementedException();
-    public Container WithExec() => throw new NotImplementedException();
-    public Container WithExposedPort() => throw new NotImplementedException();
-    public Container WithFile() => throw new NotImplementedException();
-    public Container WithFiles() => throw new NotImplementedException();
+
+    /// <summary>
+    /// EXPERIMENTAL API! Subject to change/removal at any time. Configures the provided list of devices to be accessible to this container. This currently works for Nvidia devices only.
+    /// </summary>
+    /// <param name="devices">List of devices to be accessible to this container.</param>
+    public Container ExperimentalWithGPU(IEnumerable<string> devices) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Writes the container as an OCI tarball to the destination file path on the host. Return true on success. It can also export platform variants.
+    /// </summary>
+    /// <param name="path">Host's destination path (e.g., "./tarball"). Path can be relative to the engine's workdir or absolute.</param>
+    /// <param name="platformVariants">Identifiers for other platform specific containers. Used for multi-platform image.</param>
+    /// <param name="forcedCompression">Force each layer of the exported image to use the specified compression algorithm. If this is unset, then if a layer already has a compressed blob in the engine's cache, that will be used (this can result in a mix of compression algorithms for different layers). If this is unset and a layer has no compressed blob in the engine's cache, then it will be compressed using Gzip.</param>
+    /// <param name="mediaTypes">Use the specified media types for the exported image's layers. Defaults to OCI, which is largely compatible with most recent container runtimes, but Docker may be needed for older runtimes without OCI support.</param>
+    public bool Export(string path, IEnumerable<ContainerID>? platformVariants = null, ImageLayerCompression forcedCompression, ImageMediaTypes mediaTypes = ImageMediaTypes.OCIMediaTypes) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the list of exposed ports. This includes ports already exposed by the image, even if not explicitly added with dagger.
+    /// </summary>
+    public IEnumerable<Port> ExposedPorts() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves a file at the given path. Mounts are included.
+    /// </summary>
+    /// <param name="path">The path of the file to retrieve (e.g., "./README.md").</param>
+    public File File(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Initializes this container from a pulled base image.
+    /// </summary>
+    /// <param name="address">Image's address from its registry. Formatted as [host]/[user]/[repo]:[tag] (e.g., "docker.io/dagger/dagger:main").</param>
+    public Container From(string address) => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this Container.
+    /// </summary>
+    public ContainerID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The unique image reference which can only be retrieved immediately after the 'Container.From' call.
+    /// </summary>
+    public string ImageRef() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Reads the container from an OCI tarball.
+    /// </summary>
+    /// <param name="source">File to read the container from.</param>
+    /// <param name="tag">Identifies the tag to import from the archive, if the archive bundles multiple tags.</param>
+    public Container Import(FileID source, string tag = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the value of the specified label.
+    /// </summary>
+    /// <param name="name">The name of the label (e.g., "org.opencontainers.artifact.created").</param>
+    public string Label(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the list of labels passed to container.
+    /// </summary>
+    public IEnumerable<Label> Labels() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the list of paths where a directory is mounted.
+    /// </summary>
+    public IEnumerable<string> Mounts() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a named sub-pipeline.
+    /// </summary>
+    /// <param name="name">Name of the sub-pipeline.</param>
+    /// <param name="description">Description of the sub-pipeline.</param>
+    /// <param name="labels">Labels to apply to the sub-pipeline.</param>
+    public Container Pipeline(string name, string description = "", IEnumerable<PipelineLabel>? labels = null) => throw new NotImplementedException();
+
+    /// <summary>
+    /// The platform this container executes and publishes as.
+    /// </summary>
+    public Platform Platform() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Publishes this container as a new image to the specified address. Publish returns a fully qualified ref. It can also publish platform variants.
+    /// </summary>
+    /// <param name="address">Registry's address to publish the image to. Formatted as [host]/[user]/[repo]:[tag] (e.g. "docker.io/dagger/dagger:main").</param>
+    /// <param name="platformVariants">Identifiers for other platform specific containers. Used for multi-platform image.</param>
+    /// <param name="forcedCompression">Force each layer of the published image to use the specified compression algorithm. If this is unset, then if a layer already has a compressed blob in the engine's cache, that will be used (this can result in a mix of compression algorithms for different layers). If this is unset and a layer has no compressed blob in the engine's cache, then it will be compressed using Gzip.</param>
+    /// <param name="mediaTypes">Use the specified media types for the published image's layers. Defaults to OCI, which is largely compatible with most recent registries, but Docker may be needed for older registries without OCI support.</param>
+    public string Publish(string address, IEnumerable<ContainerID>? platformVariants = null, ImageLayerCompression forcedCompression, ImageMediaTypes mediaTypes = ImageMediaTypes.OCIMediaTypes) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container's root filesystem. Mounts are not included.
+    /// </summary>
+    public Directory Rootfs() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The error stream of the last executed command. Will execute default command if none is set, or error if there's no default.
+    /// </summary>
+    public string Stderr() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The output stream of the last executed command. Will execute default command if none is set, or error if there's no default.
+    /// </summary>
+    public string Stdout() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Forces evaluation of the pipeline in the engine. It doesn't run the default command if no exec has been set.
+    /// </summary>
+    public ContainerID Sync() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Return an interactive terminal for this container using its configured default terminal command if not overridden by args (or sh as a fallback default).
+    /// </summary>
+    /// <param name="cmd">If set, override the container's default terminal command and invoke these command arguments instead.</param>
+    /// <param name="experimentalPrivilegedNesting">Provides Dagger access to the executed command. Do not use this option unless you trust the command being executed; the command being executed WILL BE GRANTED FULL ACCESS TO YOUR HOST FILESYSTEM.</param>
+    /// <param name="insecureRootCapabilities">Execute the command with all root capabilities. This is similar to running a command with "sudo" or executing "docker run" with the "--privileged" flag. Containerization does not provide any security guarantees when using this option. It should only be used when absolutely necessary and only with trusted commands.</param>
+    public Terminal Terminal(IEnumerable<string>? cmd = null, bool experimentalPrivilegedNesting = false, bool insecureRootCapabilities = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the user to be set for all commands.
+    /// </summary>
+    public string User() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Configures default arguments for future commands.
+    /// </summary>
+    /// <param name="args">Arguments to prepend to future executions (e.g., ["-v", "--no-cache"]).</param>
+    public Container WithDefaultArgs(IEnumerable<string> args) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Set the default command to invoke for the container's terminal API.
+    /// </summary>
+    /// <param name="args">The args of the command.</param>
+    /// <param name="experimentalPrivilegedNesting">Provides Dagger access to the executed command. Do not use this option unless you trust the command being executed; the command being executed WILL BE GRANTED FULL ACCESS TO YOUR HOST FILESYSTEM.</param>
+    /// <param name="insecureRootCapabilities">Execute the command with all root capabilities. This is similar to running a command with "sudo" or executing "docker run" with the "--privileged" flag. Containerization does not provide any security guarantees when using this option. It should only be used when absolutely necessary and only with trusted commands.</param>
+    public Container WithDefaultTerminalCmd(IEnumerable<string> args, bool experimentalPrivilegedNesting = false, bool insecureRootCapabilities = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a directory written at the given path.
+    /// </summary>
+    /// <param name="path">Location of the written directory (e.g., "/tmp/directory").</param>
+    /// <param name="directory">Identifier of the directory to write</param>
+    /// <param name="exclude">Patterns to exclude in the written directory (e.g. ["node_modules/**", ".gitignore", ".git/"]).</param>
+    /// <param name="include">Patterns to include in the written directory (e.g. ["*.go", "go.mod", "go.sum"]).</param>
+    /// <param name="owner">A user:group to set for the directory and its contents. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithDirectory(string path, DirectoryID directory, IEnumerable<string>? exclude = null, IEnumerable<string>? include = null, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container but with a different command entrypoint.
+    /// </summary>
+    /// <param name="args">Entrypoint to use for future executions (e.g., ["go", "run"]).</param>
+    /// <param name="keepDefaultArgs">Don't remove the default arguments when setting the entrypoint.</param>
+    public Container WithEntrypoint(IEnumerable<string> args, bool keepDefaultArgs = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus the given environment variable.
+    /// </summary>
+    /// <param name="name">The name of the environment variable (e.g., "HOST").</param>
+    /// <param name="value">The value of the environment variable. (e.g., "localhost").</param>
+    /// <param name="expand">Replace `${VAR}` or `$VAR` in the value according to the current environment variables defined in the container (e.g., "/opt/bin:$PATH").</param>
+    public Container WithEnvVariable(string name, string value, bool expand = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container after executing the specified command inside it.
+    /// </summary>
+    /// <param name="args">Command to run instead of the container's default command (e.g., ["run", "main.go"]). If empty, the container's default command is used.</param>
+    /// <param name="skipEntrypoint">If the container has an entrypoint, ignore it for args rather than using it to wrap them.</param>
+    /// <param name="stdin">Content to write to the command's standard input before closing (e.g., "Hello world").</param>
+    /// <param name="redirectStdout">Redirect the command's standard output to a file in the container (e.g., "/tmp/stdout").</param>
+    /// <param name="redirectStderr">Redirect the command's standard error to a file in the container (e.g., "/tmp/stderr").</param>
+    /// <param name="experimentalPrivilegedNesting">Provides Dagger access to the executed command. Do not use this option unless you trust the command being executed; the command being executed WILL BE GRANTED FULL ACCESS TO YOUR HOST FILESYSTEM.</param>
+    /// <param name="insecureRootCapabilities">Execute the command with all root capabilities. This is similar to running a command with "sudo" or executing "docker run" with the "--privileged" flag. Containerization does not provide any security guarantees when using this option. It should only be used when absolutely necessary and only with trusted commands.</param>
+    public Container WithExec(IEnumerable<string> args, bool skipEntrypoint = false, string stdin = "", string redirectStdout = "", string redirectStderr = "", bool experimentalPrivilegedNesting = false, bool insecureRootCapabilities = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Expose a network port. Exposed ports serve two purposes: - For health checks and introspection, when running services - For setting the EXPOSE OCI field when publishing the container
+    /// </summary>
+    /// <param name="port">Port number to expose</param>
+    /// <param name="protocol">Transport layer network protocol</param>
+    /// <param name="description">Optional port description</param>
+    /// <param name="experimentalSkipHealthcheck">Skip the health check when run as a service.</param>
+    public Container WithExposedPort(int port, NetworkProtocol protocol = NetworkProtocol.TCP, string description, bool experimentalSkipHealthcheck = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus the contents of the given file copied to the given path.
+    /// </summary>
+    /// <param name="path">Location of the copied file (e.g., "/tmp/file.txt").</param>
+    /// <param name="source">Identifier of the file to copy.</param>
+    /// <param name="permissions">Permission given to the copied file (e.g., 0600).</param>
+    /// <param name="owner">A user:group to set for the file. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithFile(string path, FileID source, int permissions, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus the contents of the given files copied to the given path.
+    /// </summary>
+    /// <param name="path">Location where copied files should be placed (e.g., "/src").</param>
+    /// <param name="sources">Identifiers of the files to copy.</param>
+    /// <param name="permissions">Permission given to the copied files (e.g., 0600).</param>
+    /// <param name="owner">A user:group to set for the files. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithFiles(string path, IEnumerable<FileID> sources, int permissions, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Indicate that subsequent operations should be featured more prominently in the UI.
+    /// </summary>
     public Container WithFocus() => throw new NotImplementedException();
-    public Container WithLabel() => throw new NotImplementedException();
-    public Container WithMountedCache() => throw new NotImplementedException();
-    public Container WithMountedDirectory() => throw new NotImplementedException();
-    public Container WithMountedFile() => throw new NotImplementedException();
-    public Container WithMountedSecret() => throw new NotImplementedException();
-    public Container WithMountedTemp() => throw new NotImplementedException();
-    public Container WithNewFile() => throw new NotImplementedException();
-    public Container WithRegistryAuth() => throw new NotImplementedException();
-    public Container WithRootfs() => throw new NotImplementedException();
-    public Container WithSecretVariable() => throw new NotImplementedException();
-    public Container WithServiceBinding() => throw new NotImplementedException();
-    public Container WithUnixSocket() => throw new NotImplementedException();
-    public Container WithUser() => throw new NotImplementedException();
-    public Container WithWorkdir() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus the given label.
+    /// </summary>
+    /// <param name="name">The name of the label (e.g., "org.opencontainers.artifact.created").</param>
+    /// <param name="value">The value of the label (e.g., "2023-01-01T00:00:00Z").</param>
+    public Container WithLabel(string name, string value) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a cache volume mounted at the given path.
+    /// </summary>
+    /// <param name="path">Location of the cache directory (e.g., "/cache/node_modules").</param>
+    /// <param name="cache">Identifier of the cache volume to mount.</param>
+    /// <param name="source">Identifier of the directory to use as the cache volume's root.</param>
+    /// <param name="sharing">Sharing mode of the cache volume.</param>
+    /// <param name="owner">A user:group to set for the mounted cache directory. Note that this changes the ownership of the specified mount along with the initial filesystem provided by source (if any). It does not have any effect if/when the cache has already been created. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithMountedCache(string path, CacheVolumeID cache, DirectoryID source, CacheSharingMode sharing = CacheSharingMode.SHARED, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a directory mounted at the given path.
+    /// </summary>
+    /// <param name="path">Location of the mounted directory (e.g., "/mnt/directory").</param>
+    /// <param name="source">Identifier of the mounted directory.</param>
+    /// <param name="owner">A user:group to set for the mounted directory and its contents. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithMountedDirectory(string path, DirectoryID source, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a file mounted at the given path.
+    /// </summary>
+    /// <param name="path">Location of the mounted file (e.g., "/tmp/file.txt").</param>
+    /// <param name="source">Identifier of the mounted file.</param>
+    /// <param name="owner">A user or user:group to set for the mounted file. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithMountedFile(string path, FileID source, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a secret mounted into a file at the given path.
+    /// </summary>
+    /// <param name="path">Location of the secret file (e.g., "/tmp/secret.txt").</param>
+    /// <param name="source">Identifier of the secret to mount.</param>
+    /// <param name="owner">A user:group to set for the mounted secret. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    /// <param name="mode">Permission given to the mounted secret (e.g., 0600). This option requires an owner to be set to be active.</param>
+    public Container WithMountedSecret(string path, SecretID source, string owner = "", int mode = 256) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a temporary directory mounted at the given path. Any writes will be ephemeral to a single withExec call; they will not be persisted to subsequent withExecs.
+    /// </summary>
+    /// <param name="path">Location of the temporary directory (e.g., "/tmp/temp_dir").</param>
+    public Container WithMountedTemp(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a new file written at the given path.
+    /// </summary>
+    /// <param name="path">Location of the written file (e.g., "/tmp/file.txt").</param>
+    /// <param name="contents">Content of the file to write (e.g., "Hello world!").</param>
+    /// <param name="permissions">Permission given to the written file (e.g., 0600).</param>
+    /// <param name="owner">A user:group to set for the file. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithNewFile(string path, string contents = "", int permissions = 420, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with a registry authentication for a given address.
+    /// </summary>
+    /// <param name="address">Registry's address to bind the authentication to. Formatted as [host]/[user]/[repo]:[tag] (e.g. docker.io/dagger/dagger:main).</param>
+    /// <param name="username">The username of the registry's account (e.g., "Dagger").</param>
+    /// <param name="secret">The API key, password or token to authenticate to this registry.</param>
+    public Container WithRegistryAuth(string address, string username, SecretID secret) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the container with the given directory mounted to /.
+    /// </summary>
+    /// <param name="directory">Directory to mount.</param>
+    public Container WithRootfs(DirectoryID directory) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus an env variable containing the given secret.
+    /// </summary>
+    /// <param name="name">The name of the secret variable (e.g., "API_SECRET").</param>
+    /// <param name="secret">The identifier of the secret value.</param>
+    public Container WithSecretVariable(string name, SecretID secret) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Establish a runtime dependency on a service. The service will be started automatically when needed and detached when it is no longer needed, executing the default command if none is set. The service will be reachable from the container via the provided hostname alias. The service dependency will also convey to any files or directories produced by the container.
+    /// </summary>
+    /// <param name="alias">A name that can be used to reach the service from the container</param>
+    /// <param name="service">Identifier of the service container</param>
+    public Container WithServiceBinding(string alias, ServiceID service) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container plus a socket forwarded to the given Unix socket path.
+    /// </summary>
+    /// <param name="path">Location of the forwarded Unix socket (e.g., "/tmp/socket").</param>
+    /// <param name="source">Identifier of the socket to forward.</param>
+    /// <param name="owner">A user:group to set for the mounted socket. The user and group can either be an ID (1000:1000) or a name (foo:bar). If the group is omitted, it defaults to the same as the user.</param>
+    public Container WithUnixSocket(string path, SocketID source, string owner = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with a different command user.
+    /// </summary>
+    /// <param name="name">The user to set (e.g., "root").</param>
+    public Container WithUser(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with a different working directory.
+    /// </summary>
+    /// <param name="path">The path to set as the working directory (e.g., "/app").</param>
+    public Container WithWorkdir(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with unset default arguments for future commands.
+    /// </summary>
     public Container WithoutDefaultArgs() => throw new NotImplementedException();
-    public Container WithoutEntrypoint() => throw new NotImplementedException();
-    public Container WithoutEnvVariable() => throw new NotImplementedException();
-    public Container WithoutExposedPort() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with the directory at the given path removed.
+    /// </summary>
+    /// <param name="path">Location of the directory to remove (e.g., ".github/").</param>
+    public Container WithoutDirectory(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with an unset command entrypoint.
+    /// </summary>
+    /// <param name="keepDefaultArgs">Don't remove the default arguments when unsetting the entrypoint.</param>
+    public Container WithoutEntrypoint(bool keepDefaultArgs = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container minus the given environment variable.
+    /// </summary>
+    /// <param name="name">The name of the environment variable (e.g., "HOST").</param>
+    public Container WithoutEnvVariable(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Unexpose a previously exposed port.
+    /// </summary>
+    /// <param name="port">Port number to unexpose</param>
+    /// <param name="protocol">Port protocol to unexpose</param>
+    public Container WithoutExposedPort(int port, NetworkProtocol protocol = NetworkProtocol.TCP) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with the file at the given path removed.
+    /// </summary>
+    /// <param name="path">Location of the file to remove (e.g., "/file.txt").</param>
+    public Container WithoutFile(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Indicate that subsequent operations should not be featured more prominently in the UI. This is the initial state of all containers.
+    /// </summary>
     public Container WithoutFocus() => throw new NotImplementedException();
-    public Container WithoutLabel() => throw new NotImplementedException();
-    public Container WithoutMount() => throw new NotImplementedException();
-    public Container WithoutRegistryAuth() => throw new NotImplementedException();
-    public Container WithoutUnixSocket() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container minus the given environment label.
+    /// </summary>
+    /// <param name="name">The name of the label to remove (e.g., "org.opencontainers.artifact.created").</param>
+    public Container WithoutLabel(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container after unmounting everything at the given path.
+    /// </summary>
+    /// <param name="path">Location of the cache directory (e.g., "/cache/node_modules").</param>
+    public Container WithoutMount(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container without the registry authentication of a given address.
+    /// </summary>
+    /// <param name="address">Registry's address to remove the authentication from. Formatted as [host]/[user]/[repo]:[tag] (e.g. docker.io/dagger/dagger:main).</param>
+    public Container WithoutRegistryAuth(string address) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container minus the given environment variable containing the secret.
+    /// </summary>
+    /// <param name="name">The name of the environment variable (e.g., "HOST").</param>
+    public Container WithoutSecretVariable(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with a previously added Unix socket removed.
+    /// </summary>
+    /// <param name="path">Location of the socket to remove (e.g., "/tmp/socket").</param>
+    public Container WithoutUnixSocket(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with an unset command user. Should default to root.
+    /// </summary>
     public Container WithoutUser() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this container with an unset working directory. Should default to "/".
+    /// </summary>
     public Container WithoutWorkdir() => throw new NotImplementedException();
-    public Container Workdir() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the working directory for all commands.
+    /// </summary>
+    public string Workdir() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ContainerID` scalar type represents an identifier for an object of type Container.
+/// </summary>
+public struct ContainerID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ContainerID value) => value.Value;
+    public static implicit operator ContainerID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Reflective module API provided to functions at runtime.
+/// </summary>
+public class CurrentModule
+{
+    /// <summary>
+    /// A unique identifier for this CurrentModule.
+    /// </summary>
+    public CurrentModuleID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the module being executed in
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The directory containing the module's source code loaded into the engine (plus any generated code that may have been created).
+    /// </summary>
+    public Directory Source() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a directory from the module's scratch working directory, including any changes that may have been made to it during module function execution.
+    /// </summary>
+    /// <param name="path">Location of the directory to access (e.g., ".").</param>
+    /// <param name="exclude">Exclude artifacts that match the given pattern (e.g., ["node_modules/", ".git*"]).</param>
+    /// <param name="include">Include only artifacts that match the given pattern (e.g., ["app/", "package.*"]).</param>
+    public Directory Workdir(string path, IEnumerable<string>? exclude = null, IEnumerable<string>? include = null) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a file from the module's scratch working directory, including any changes that may have been made to it during module function execution.Load a file from the module's scratch working directory, including any changes that may have been made to it during module function execution.
+    /// </summary>
+    /// <param name="path">Location of the file to retrieve (e.g., "README.md").</param>
+    public File WorkdirFile(string path) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `CurrentModuleID` scalar type represents an identifier for an object of type CurrentModule.
+/// </summary>
+public struct CurrentModuleID
+{
+    public string Value { get; init; }
+    public static implicit operator string(CurrentModuleID value) => value.Value;
+    public static implicit operator CurrentModuleID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A directory.
+/// </summary>
+public class Directory
+{
+    /// <summary>
+    /// Load the directory as a Dagger module
+    /// </summary>
+    /// <param name="sourceRootPath">An optional subpath of the directory which contains the module's configuration file. This is needed when the module code is in a subdirectory but requires parent directories to be loaded in order to execute. For example, the module source code may need a go.mod, project.toml, package.json, etc. file from a parent directory. If not set, the module source code is loaded from the root of the directory.</param>
+    public Module AsModule(string sourceRootPath = ".") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Gets the difference between this directory and an another directory.
+    /// </summary>
+    /// <param name="other">Identifier of the directory to compare.</param>
+    public Directory Diff(DirectoryID other) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves a directory at the given path.
+    /// </summary>
+    /// <param name="path">Location of the directory to retrieve (e.g., "/src").</param>
+    public Directory Directory(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Builds a new Docker container from this directory.
+    /// </summary>
+    /// <param name="platform">The platform to build.</param>
+    /// <param name="dockerfile">Path to the Dockerfile to use (e.g., "frontend.Dockerfile").</param>
+    /// <param name="target">Target build stage to build.</param>
+    /// <param name="buildArgs">Build arguments to use in the build.</param>
+    /// <param name="secrets">Secrets to pass to the build. They will be mounted at /run/secrets/[secret-name].</param>
+    public Container DockerBuild(Platform platform, string dockerfile = "Dockerfile", string target = "", IEnumerable<BuildArg>? buildArgs = null, IEnumerable<SecretID>? secrets = null) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a list of files and directories at the given path.
+    /// </summary>
+    /// <param name="path">Location of the directory to look at (e.g., "/src").</param>
+    public IEnumerable<string> Entries(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Writes the contents of the directory to a path on the host.
+    /// </summary>
+    /// <param name="path">Location of the copied directory (e.g., "logs/").</param>
+    /// <param name="wipe">If true, then the host directory will be wiped clean before exporting so that it exactly matches the directory being exported; this means it will delete any files on the host that aren't in the exported dir. If false (the default), the contents of the directory will be merged with any existing contents of the host directory, leaving any existing files on the host that aren't in the exported directory alone.</param>
+    public bool Export(string path, bool wipe = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves a file at the given path.
+    /// </summary>
+    /// <param name="path">Location of the file to retrieve (e.g., "README.md").</param>
+    public File File(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a list of files and directories that matche the given pattern.
+    /// </summary>
+    /// <param name="pattern">Pattern to match (e.g., "*.md").</param>
+    public IEnumerable<string> Glob(string pattern) => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this Directory.
+    /// </summary>
+    public DirectoryID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a named sub-pipeline.
+    /// </summary>
+    /// <param name="name">Name of the sub-pipeline.</param>
+    /// <param name="description">Description of the sub-pipeline.</param>
+    /// <param name="labels">Labels to apply to the sub-pipeline.</param>
+    public Directory Pipeline(string name, string description = "", IEnumerable<PipelineLabel>? labels = null) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Force evaluation in the engine.
+    /// </summary>
+    public DirectoryID Sync() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory plus a directory written at the given path.
+    /// </summary>
+    /// <param name="path">Location of the written directory (e.g., "/src/").</param>
+    /// <param name="directory">Identifier of the directory to copy.</param>
+    /// <param name="exclude">Exclude artifacts that match the given pattern (e.g., ["node_modules/", ".git*"]).</param>
+    /// <param name="include">Include only artifacts that match the given pattern (e.g., ["app/", "package.*"]).</param>
+    public Directory WithDirectory(string path, DirectoryID directory, IEnumerable<string>? exclude = null, IEnumerable<string>? include = null) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory plus the contents of the given file copied to the given path.
+    /// </summary>
+    /// <param name="path">Location of the copied file (e.g., "/file.txt").</param>
+    /// <param name="source">Identifier of the file to copy.</param>
+    /// <param name="permissions">Permission given to the copied file (e.g., 0600).</param>
+    public Directory WithFile(string path, FileID source, int permissions) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory plus the contents of the given files copied to the given path.
+    /// </summary>
+    /// <param name="path">Location where copied files should be placed (e.g., "/src").</param>
+    /// <param name="sources">Identifiers of the files to copy.</param>
+    /// <param name="permissions">Permission given to the copied files (e.g., 0600).</param>
+    public Directory WithFiles(string path, IEnumerable<FileID> sources, int permissions) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory plus a new directory created at the given path.
+    /// </summary>
+    /// <param name="path">Location of the directory created (e.g., "/logs").</param>
+    /// <param name="permissions">Permission granted to the created directory (e.g., 0777).</param>
+    public Directory WithNewDirectory(string path, int permissions = 420) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory plus a new file written at the given path.
+    /// </summary>
+    /// <param name="path">Location of the written file (e.g., "/file.txt").</param>
+    /// <param name="contents">Content of the written file (e.g., "Hello world!").</param>
+    /// <param name="permissions">Permission given to the copied file (e.g., 0600).</param>
+    public Directory WithNewFile(string path, string contents, int permissions = 420) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory with all file/dir timestamps set to the given time.
+    /// </summary>
+    /// <param name="timestamp">Timestamp to set dir/files in. Formatted in seconds following Unix epoch (e.g., 1672531199).</param>
+    public Directory WithTimestamps(int timestamp) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory with the directory at the given path removed.
+    /// </summary>
+    /// <param name="path">Location of the directory to remove (e.g., ".github/").</param>
+    public Directory WithoutDirectory(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this directory with the file at the given path removed.
+    /// </summary>
+    /// <param name="path">Location of the file to remove (e.g., "/file.txt").</param>
+    public Directory WithoutFile(string path) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `DirectoryID` scalar type represents an identifier for an object of type Directory.
+/// </summary>
+public struct DirectoryID
+{
+    public string Value { get; init; }
+    public static implicit operator string(DirectoryID value) => value.Value;
+    public static implicit operator DirectoryID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// An environment variable name and value.
+/// </summary>
+public class EnvVariable
+{
+    /// <summary>
+    /// A unique identifier for this EnvVariable.
+    /// </summary>
+    public EnvVariableID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The environment variable name.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The environment variable value.
+    /// </summary>
+    public string Value() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `EnvVariableID` scalar type represents an identifier for an object of type EnvVariable.
+/// </summary>
+public struct EnvVariableID
+{
+    public string Value { get; init; }
+    public static implicit operator string(EnvVariableID value) => value.Value;
+    public static implicit operator EnvVariableID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A definition of a field on a custom object defined in a Module. A field on an object has a static value, as opposed to a function on an object whose value is computed by invoking code (and can accept arguments).
+/// </summary>
+public class FieldTypeDef
+{
+    /// <summary>
+    /// A doc string for the field, if any.
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this FieldTypeDef.
+    /// </summary>
+    public FieldTypeDefID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the field in lowerCamelCase format.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The type of the field.
+    /// </summary>
+    public TypeDef TypeDef() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `FieldTypeDefID` scalar type represents an identifier for an object of type FieldTypeDef.
+/// </summary>
+public struct FieldTypeDefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(FieldTypeDefID value) => value.Value;
+    public static implicit operator FieldTypeDefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A file.
+/// </summary>
+public class File
+{
+    /// <summary>
+    /// Retrieves the contents of the file.
+    /// </summary>
+    public string Contents() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Writes the file to a file path on the host.
+    /// </summary>
+    /// <param name="path">Location of the written directory (e.g., "output.txt").</param>
+    /// <param name="allowParentDirPath">If allowParentDirPath is true, the path argument can be a directory path, in which case the file will be created in that directory.</param>
+    public bool Export(string path, bool allowParentDirPath = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this File.
+    /// </summary>
+    public FileID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the name of the file.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the size of the file, in bytes.
+    /// </summary>
+    public int Size() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Force evaluation in the engine.
+    /// </summary>
+    public FileID Sync() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves this file with its created/modified timestamps set to the given time.
+    /// </summary>
+    /// <param name="timestamp">Timestamp to set dir/files in. Formatted in seconds following Unix epoch (e.g., 1672531199).</param>
+    public File WithTimestamps(int timestamp) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `FileID` scalar type represents an identifier for an object of type File.
+/// </summary>
+public struct FileID
+{
+    public string Value { get; init; }
+    public static implicit operator string(FileID value) => value.Value;
+    public static implicit operator FileID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).
+/// </summary>
+public struct Float
+{
+    public string Value { get; init; }
+    public static implicit operator string(Float value) => value.Value;
+    public static implicit operator Float(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Function represents a resolver provided by a Module. A function always evaluates against a parent object and is given a set of named arguments.
+/// </summary>
+public class Function
+{
+    /// <summary>
+    /// Arguments accepted by the function, if any.
+    /// </summary>
+    public IEnumerable<FunctionArg> Args() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A doc string for the function, if any.
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this Function.
+    /// </summary>
+    public FunctionID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the function.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The type returned by the function.
+    /// </summary>
+    public TypeDef ReturnType() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns the function with the provided argument
+    /// </summary>
+    /// <param name="name">The name of the argument</param>
+    /// <param name="typeDef">The type of the argument</param>
+    /// <param name="description">A doc string for the argument, if any</param>
+    /// <param name="defaultValue">A default value to use for this argument if not explicitly set by the caller, if any</param>
+    public Function WithArg(string name, TypeDefID typeDef, string description = "", JSON defaultValue) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns the function with the given doc string.
+    /// </summary>
+    /// <param name="description">The doc string to set.</param>
+    public Function WithDescription(string description) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// An argument accepted by a function. This is a specification for an argument at function definition time, not an argument passed at function call time.
+/// </summary>
+public class FunctionArg
+{
+    /// <summary>
+    /// A default value to use for this argument when not explicitly set by the caller, if any.
+    /// </summary>
+    public JSON DefaultValue() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A doc string for the argument, if any.
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this FunctionArg.
+    /// </summary>
+    public FunctionArgID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the argument in lowerCamelCase format.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The type of the argument.
+    /// </summary>
+    public TypeDef TypeDef() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `FunctionArgID` scalar type represents an identifier for an object of type FunctionArg.
+/// </summary>
+public struct FunctionArgID
+{
+    public string Value { get; init; }
+    public static implicit operator string(FunctionArgID value) => value.Value;
+    public static implicit operator FunctionArgID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// An active function call.
+/// </summary>
+public class FunctionCall
+{
+    /// <summary>
+    /// A unique identifier for this FunctionCall.
+    /// </summary>
+    public FunctionCallID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The argument values the function is being invoked with.
+    /// </summary>
+    public IEnumerable<FunctionCallArgValue> InputArgs() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the function being called.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The value of the parent object of the function being called. If the function is top-level to the module, this is always an empty object.
+    /// </summary>
+    public JSON Parent() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the parent object of the function being called. If the function is top-level to the module, this is the name of the module.
+    /// </summary>
+    public string ParentName() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Set the return value of the function call to the provided value.
+    /// </summary>
+    /// <param name="value">JSON serialization of the return value.</param>
+    public Void ReturnValue(JSON value) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// A value passed as a named argument to a function call.
+/// </summary>
+public class FunctionCallArgValue
+{
+    /// <summary>
+    /// A unique identifier for this FunctionCallArgValue.
+    /// </summary>
+    public FunctionCallArgValueID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the argument.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The value of the argument represented as a JSON serialized string.
+    /// </summary>
+    public JSON Value() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `FunctionCallArgValueID` scalar type represents an identifier for an object of type FunctionCallArgValue.
+/// </summary>
+public struct FunctionCallArgValueID
+{
+    public string Value { get; init; }
+    public static implicit operator string(FunctionCallArgValueID value) => value.Value;
+    public static implicit operator FunctionCallArgValueID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The `FunctionCallID` scalar type represents an identifier for an object of type FunctionCall.
+/// </summary>
+public struct FunctionCallID
+{
+    public string Value { get; init; }
+    public static implicit operator string(FunctionCallID value) => value.Value;
+    public static implicit operator FunctionCallID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The `FunctionID` scalar type represents an identifier for an object of type Function.
+/// </summary>
+public struct FunctionID
+{
+    public string Value { get; init; }
+    public static implicit operator string(FunctionID value) => value.Value;
+    public static implicit operator FunctionID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The result of running an SDK's codegen.
+/// </summary>
+public class GeneratedCode
+{
+    /// <summary>
+    /// The directory containing the generated code.
+    /// </summary>
+    public Directory Code() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this GeneratedCode.
+    /// </summary>
+    public GeneratedCodeID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// List of paths to mark generated in version control (i.e. .gitattributes).
+    /// </summary>
+    public IEnumerable<string> VcsGeneratedPaths() => throw new NotImplementedException();
+
+    /// <summary>
+    /// List of paths to ignore in version control (i.e. .gitignore).
+    /// </summary>
+    public IEnumerable<string> VcsIgnoredPaths() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Set the list of paths to mark generated in version control.
+    /// </summary>
+    /// <param name="paths"></param>
+    public GeneratedCode WithVCSGeneratedPaths(IEnumerable<string> paths) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Set the list of paths to ignore in version control.
+    /// </summary>
+    /// <param name="paths"></param>
+    public GeneratedCode WithVCSIgnoredPaths(IEnumerable<string> paths) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `GeneratedCodeID` scalar type represents an identifier for an object of type GeneratedCode.
+/// </summary>
+public struct GeneratedCodeID
+{
+    public string Value { get; init; }
+    public static implicit operator string(GeneratedCodeID value) => value.Value;
+    public static implicit operator GeneratedCodeID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Module source originating from a git repo.
+/// </summary>
+public class GitModuleSource
+{
+    /// <summary>
+    /// The URL from which the source's git repo can be cloned.
+    /// </summary>
+    public string CloneURL() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The resolved commit of the git repo this source points to.
+    /// </summary>
+    public string Commit() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The directory containing everything needed to load load and use the module.
+    /// </summary>
+    public Directory ContextDirectory() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The URL to the source's git repo in a web browser
+    /// </summary>
+    public string HtmlURL() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this GitModuleSource.
+    /// </summary>
+    public GitModuleSourceID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The path to the root of the module source under the context directory. This directory contains its configuration file. It also contains its source code (possibly as a subdirectory).
+    /// </summary>
+    public string RootSubpath() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The specified version of the git repo this source points to.
+    /// </summary>
+    public string Version() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `GitModuleSourceID` scalar type represents an identifier for an object of type GitModuleSource.
+/// </summary>
+public struct GitModuleSourceID
+{
+    public string Value { get; init; }
+    public static implicit operator string(GitModuleSourceID value) => value.Value;
+    public static implicit operator GitModuleSourceID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A git ref (tag, branch, or commit).
+/// </summary>
+public class GitRef
+{
+    /// <summary>
+    /// The resolved commit id at this ref.
+    /// </summary>
+    public string Commit() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this GitRef.
+    /// </summary>
+    public GitRefID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The filesystem tree at this ref.
+    /// </summary>
+    /// <param name="sshKnownHosts">DEPRECATED: This option should be passed to `git` instead.</param>
+    /// <param name="sshAuthSocket">DEPRECATED: This option should be passed to `git` instead.</param>
+    public Directory Tree(string sshKnownHosts, SocketID sshAuthSocket) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `GitRefID` scalar type represents an identifier for an object of type GitRef.
+/// </summary>
+public struct GitRefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(GitRefID value) => value.Value;
+    public static implicit operator GitRefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A git repository.
+/// </summary>
+public class GitRepository
+{
+    /// <summary>
+    /// Returns details of a branch.
+    /// </summary>
+    /// <param name="name">Branch's name (e.g., "main").</param>
+    public GitRef Branch(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns details of a commit.
+    /// </summary>
+    /// <param name="id">Identifier of the commit (e.g., "b6315d8f2810962c601af73f86831f6866ea798b").</param>
+    public GitRef Commit(string id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns details for HEAD.
+    /// </summary>
+    public GitRef Head() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this GitRepository.
+    /// </summary>
+    public GitRepositoryID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns details of a ref.
+    /// </summary>
+    /// <param name="name">Ref's name (can be a commit identifier, a tag name, a branch name, or a fully-qualified ref).</param>
+    public GitRef Ref(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns details of a tag.
+    /// </summary>
+    /// <param name="name">Tag's name (e.g., "v0.3.9").</param>
+    public GitRef Tag(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Header to authenticate the remote with.
+    /// </summary>
+    /// <param name="header">Secret used to populate the Authorization HTTP header</param>
+    public GitRepository WithAuthHeader(SecretID header) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Token to authenticate the remote with.
+    /// </summary>
+    /// <param name="token">Secret used to populate the password during basic HTTP Authorization</param>
+    public GitRepository WithAuthToken(SecretID token) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `GitRepositoryID` scalar type represents an identifier for an object of type GitRepository.
+/// </summary>
+public struct GitRepositoryID
+{
+    public string Value { get; init; }
+    public static implicit operator string(GitRepositoryID value) => value.Value;
+    public static implicit operator GitRepositoryID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Information about the host environment.
+/// </summary>
+public class Host
+{
+    /// <summary>
+    /// Accesses a directory on the host.
+    /// </summary>
+    /// <param name="path">Location of the directory to access (e.g., ".").</param>
+    /// <param name="exclude">Exclude artifacts that match the given pattern (e.g., ["node_modules/", ".git*"]).</param>
+    /// <param name="include">Include only artifacts that match the given pattern (e.g., ["app/", "package.*"]).</param>
+    public Directory Directory(string path, IEnumerable<string>? exclude = null, IEnumerable<string>? include = null) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Accesses a file on the host.
+    /// </summary>
+    /// <param name="path">Location of the file to retrieve (e.g., "README.md").</param>
+    public File File(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this Host.
+    /// </summary>
+    public HostID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a service that forwards traffic to a specified address via the host.
+    /// </summary>
+    /// <param name="host">Upstream host to forward traffic to.</param>
+    /// <param name="ports">Ports to expose via the service, forwarding through the host network. If a port's frontend is unspecified or 0, it defaults to the same as the backend port. An empty set of ports is not valid; an error will be returned.</param>
+    public Service Service(string host = "localhost", IEnumerable<PortForward> ports) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Sets a secret given a user-defined name and the file path on the host, and returns the secret. The file is limited to a size of 512000 bytes.
+    /// </summary>
+    /// <param name="name">The user defined name for this secret.</param>
+    /// <param name="path">Location of the file to set as a secret.</param>
+    public Secret SetSecretFile(string name, string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a tunnel that forwards traffic from the host to a service.
+    /// </summary>
+    /// <param name="service">Service to send traffic from the tunnel.</param>
+    /// <param name="ports">Configure explicit port forwarding rules for the tunnel. If a port's frontend is unspecified or 0, a random port will be chosen by the host. If no ports are given, all of the service's ports are forwarded. If native is true, each port maps to the same port on the host. If native is false, each port maps to a random port chosen by the host. If ports are given and native is true, the ports are additive.</param>
+    /// <param name="native">Map each service port to the same port on the host, as if the service were running natively. Note: enabling may result in port conflicts.</param>
+    public Service Tunnel(ServiceID service, IEnumerable<PortForward>? ports = null, bool native = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Accesses a Unix socket on the host.
+    /// </summary>
+    /// <param name="path">Location of the Unix socket (e.g., "/var/run/docker.sock").</param>
+    public Socket UnixSocket(string path) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `HostID` scalar type represents an identifier for an object of type Host.
+/// </summary>
+public struct HostID
+{
+    public string Value { get; init; }
+    public static implicit operator string(HostID value) => value.Value;
+    public static implicit operator HostID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Compression algorithm to use for image layers.
+/// </summary>
+public enum ImageLayerCompression
+{
+    //
+    Gzip,
+
+    //
+    Zstd,
+
+    //
+    EStarGZ,
+
+    //
+    Uncompressed,
+}
+
+/// <summary>
+/// Mediatypes to use in published or exported image metadata.
+/// </summary>
+public enum ImageMediaTypes
+{
+    //
+    OCIMediaTypes,
+
+    //
+    DockerMediaTypes,
+}
+
+/// <summary>
+/// A graphql input type, which is essentially just a group of named args.
+/// This is currently only used to represent pre-existing usage of graphql input types
+/// in the core API. It is not used by user modules and shouldn't ever be as user
+/// module accept input objects via their id rather than graphql input types.
+/// </summary>
+public class InputTypeDef
+{
+    /// <summary>
+    /// Static fields defined on this input object, if any.
+    /// </summary>
+    public IEnumerable<FieldTypeDef> Fields() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this InputTypeDef.
+    /// </summary>
+    public InputTypeDefID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the input object.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `InputTypeDefID` scalar type represents an identifier for an object of type InputTypeDef.
+/// </summary>
+public struct InputTypeDefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(InputTypeDefID value) => value.Value;
+    public static implicit operator InputTypeDefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+/// </summary>
+public struct Int
+{
+    public int Value { get; init; }
+    public static implicit operator int(Int value) => value.Value;
+    public static implicit operator Int(int value) => new() { Value = value };
+}
+
+/// <summary>
+/// A definition of a custom interface defined in a Module.
+/// </summary>
+public class InterfaceTypeDef
+{
+    /// <summary>
+    /// The doc string for the interface, if any.
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Functions defined on this interface, if any.
+    /// </summary>
+    public IEnumerable<Function> Functions() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this InterfaceTypeDef.
+    /// </summary>
+    public InterfaceTypeDefID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the interface.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If this InterfaceTypeDef is associated with a Module, the name of the module. Unset otherwise.
+    /// </summary>
+    public string SourceModuleName() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `InterfaceTypeDefID` scalar type represents an identifier for an object of type InterfaceTypeDef.
+/// </summary>
+public struct InterfaceTypeDefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(InterfaceTypeDefID value) => value.Value;
+    public static implicit operator InterfaceTypeDefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// An arbitrary JSON-encoded value.
+/// </summary>
+public struct JSON
+{
+    public string Value { get; init; }
+    public static implicit operator string(JSON value) => value.Value;
+    public static implicit operator JSON(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A simple key value object that represents a label.
+/// </summary>
+public class Label
+{
+    /// <summary>
+    /// A unique identifier for this Label.
+    /// </summary>
+    public LabelID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The label name.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The label value.
+    /// </summary>
+    public string Value() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `LabelID` scalar type represents an identifier for an object of type Label.
+/// </summary>
+public struct LabelID
+{
+    public string Value { get; init; }
+    public static implicit operator string(LabelID value) => value.Value;
+    public static implicit operator LabelID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A definition of a list type in a Module.
+/// </summary>
+public class ListTypeDef
+{
+    /// <summary>
+    /// The type of the elements in the list.
+    /// </summary>
+    public TypeDef ElementTypeDef() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this ListTypeDef.
+    /// </summary>
+    public ListTypeDefID Id() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ListTypeDefID` scalar type represents an identifier for an object of type ListTypeDef.
+/// </summary>
+public struct ListTypeDefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ListTypeDefID value) => value.Value;
+    public static implicit operator ListTypeDefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Module source that that originates from a path locally relative to an arbitrary directory.
+/// </summary>
+public class LocalModuleSource
+{
+    /// <summary>
+    /// The directory containing everything needed to load load and use the module.
+    /// </summary>
+    public Directory ContextDirectory() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this LocalModuleSource.
+    /// </summary>
+    public LocalModuleSourceID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The path to the root of the module source under the context directory. This directory contains its configuration file. It also contains its source code (possibly as a subdirectory).
+    /// </summary>
+    public string RootSubpath() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `LocalModuleSourceID` scalar type represents an identifier for an object of type LocalModuleSource.
+/// </summary>
+public struct LocalModuleSourceID
+{
+    public string Value { get; init; }
+    public static implicit operator string(LocalModuleSourceID value) => value.Value;
+    public static implicit operator LocalModuleSourceID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A Dagger module.
+/// </summary>
+public class Module
+{
+    /// <summary>
+    /// Modules used by this module.
+    /// </summary>
+    public IEnumerable<Module> Dependencies() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The dependencies as configured by the module.
+    /// </summary>
+    public IEnumerable<ModuleDependency> DependencyConfig() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The doc string of the module, if any
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The generated files and directories made on top of the module source's context directory.
+    /// </summary>
+    public Directory GeneratedContextDiff() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The module source's context plus any configuration and source files created by codegen.
+    /// </summary>
+    public Directory GeneratedContextDirectory() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this Module.
+    /// </summary>
+    public ModuleID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the module with the objects loaded via its SDK.
+    /// </summary>
+    public Module Initialize() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Interfaces served by this module.
+    /// </summary>
+    public IEnumerable<TypeDef> Interfaces() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the module
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Objects served by this module.
+    /// </summary>
+    public IEnumerable<TypeDef> Objects() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The container that runs the module's entrypoint. It will fail to execute if the module doesn't compile.
+    /// </summary>
+    public Container Runtime() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The SDK used by this module. Either a name of a builtin SDK or a module source ref string pointing to the SDK's implementation.
+    /// </summary>
+    public string Sdk() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Serve a module's API in the current session. Note: this can only be called once per session. In the future, it could return a stream or service to remove the side effect.
+    /// </summary>
+    public Void Serve() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The source for the module.
+    /// </summary>
+    public ModuleSource Source() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the module with the given description
+    /// </summary>
+    /// <param name="description">The description to set</param>
+    public Module WithDescription(string description) => throw new NotImplementedException();
+
+    /// <summary>
+    /// This module plus the given Interface type and associated functions
+    /// </summary>
+    /// <param name="iface"></param>
+    public Module WithInterface(TypeDefID iface) => throw new NotImplementedException();
+
+    /// <summary>
+    /// This module plus the given Object type and associated functions.
+    /// </summary>
+    /// <param name="object"></param>
+    public Module WithObject(TypeDefID object) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the module with basic configuration loaded if present.
+    /// </summary>
+    /// <param name="source">The module source to initialize from.</param>
+    public Module WithSource(ModuleSourceID source) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The configuration of dependency of a module.
+/// </summary>
+public class ModuleDependency
+{
+    /// <summary>
+    /// A unique identifier for this ModuleDependency.
+    /// </summary>
+    public ModuleDependencyID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the dependency module.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The source for the dependency module.
+    /// </summary>
+    public ModuleSource Source() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ModuleDependencyID` scalar type represents an identifier for an object of type ModuleDependency.
+/// </summary>
+public struct ModuleDependencyID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ModuleDependencyID value) => value.Value;
+    public static implicit operator ModuleDependencyID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The `ModuleID` scalar type represents an identifier for an object of type Module.
+/// </summary>
+public struct ModuleID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ModuleID value) => value.Value;
+    public static implicit operator ModuleID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The source needed to load and run a module, along with any metadata about the source such as versions/urls/etc.
+/// </summary>
+public class ModuleSource
+{
+    /// <summary>
+    /// If the source is a of kind git, the git source representation of it.
+    /// </summary>
+    public GitModuleSource AsGitSource() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If the source is of kind local, the local source representation of it.
+    /// </summary>
+    public LocalModuleSource AsLocalSource() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load the source as a module. If this is a local source, the parent directory must have been provided during module source creation
+    /// </summary>
+    public Module AsModule() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A human readable ref string representation of this module source.
+    /// </summary>
+    public string AsString() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns whether the module source has a configuration file.
+    /// </summary>
+    public bool ConfigExists() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The directory containing everything needed to load load and use the module.
+    /// </summary>
+    public Directory ContextDirectory() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The dependencies of the module source. Includes dependencies from the configuration and any extras from withDependencies calls.
+    /// </summary>
+    public IEnumerable<ModuleDependency> Dependencies() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The directory containing the module configuration and source code (source code may be in a subdir).
+    /// </summary>
+    /// <param name="path">The path from the source directory to select.</param>
+    public Directory Directory(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this ModuleSource.
+    /// </summary>
+    public ModuleSourceID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The kind of source (e.g. local, git, etc.)
+    /// </summary>
+    public ModuleSourceKind Kind() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If set, the name of the module this source references, including any overrides at runtime by callers.
+    /// </summary>
+    public string ModuleName() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The original name of the module this source references, as defined in the module configuration.
+    /// </summary>
+    public string ModuleOriginalName() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The path to the module source's context directory on the caller's filesystem. Only valid for local sources.
+    /// </summary>
+    public string ResolveContextPathFromCaller() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Resolve the provided module source arg as a dependency relative to this module source.
+    /// </summary>
+    /// <param name="dep">The dependency module source to resolve.</param>
+    public ModuleSource ResolveDependency(ModuleSourceID dep) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a directory from the caller optionally with a given view applied.
+    /// </summary>
+    /// <param name="path">The path on the caller's filesystem to load.</param>
+    /// <param name="viewName">If set, the name of the view to apply to the path.</param>
+    public Directory ResolveDirectoryFromCaller(string path, string viewName) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load the source from its path on the caller's filesystem, including only needed+configured files and directories. Only valid for local sources.
+    /// </summary>
+    public ModuleSource ResolveFromCaller() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The path relative to context of the root of the module source, which contains dagger.json. It also contains the module implementation source code, but that may or may not being a subdir of this root.
+    /// </summary>
+    public string SourceRootSubpath() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The path relative to context of the module implementation source code.
+    /// </summary>
+    public string SourceSubpath() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieve a named view defined for this module source.
+    /// </summary>
+    /// <param name="name">The name of the view to retrieve.</param>
+    public ModuleSourceView View(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// The named views defined for this module source, which are sets of directory filters that can be applied to directory arguments provided to functions.
+    /// </summary>
+    public IEnumerable<ModuleSourceView> Views() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Update the module source with a new context directory. Only valid for local sources.
+    /// </summary>
+    /// <param name="dir">The directory to set as the context directory.</param>
+    public ModuleSource WithContextDirectory(DirectoryID dir) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Append the provided dependencies to the module source's dependency list.
+    /// </summary>
+    /// <param name="dependencies">The dependencies to append.</param>
+    public ModuleSource WithDependencies(IEnumerable<ModuleDependencyID> dependencies) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Update the module source with a new name.
+    /// </summary>
+    /// <param name="name">The name to set.</param>
+    public ModuleSource WithName(string name) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Update the module source with a new SDK.
+    /// </summary>
+    /// <param name="sdk">The SDK to set.</param>
+    public ModuleSource WithSDK(string sdk) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Update the module source with a new source subpath.
+    /// </summary>
+    /// <param name="path">The path to set as the source subpath.</param>
+    public ModuleSource WithSourceSubpath(string path) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Update the module source with a new named view.
+    /// </summary>
+    /// <param name="name">The name of the view to set.</param>
+    /// <param name="patterns">The patterns to set as the view filters.</param>
+    public ModuleSource WithView(string name, IEnumerable<string> patterns) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ModuleSourceID` scalar type represents an identifier for an object of type ModuleSource.
+/// </summary>
+public struct ModuleSourceID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ModuleSourceID value) => value.Value;
+    public static implicit operator ModuleSourceID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The kind of module source.
+/// </summary>
+public enum ModuleSourceKind
+{
+    //
+    LOCAL_SOURCE,
+
+    //
+    GIT_SOURCE,
+}
+
+/// <summary>
+/// A named set of path filters that can be applied to directory arguments provided to functions.
+/// </summary>
+public class ModuleSourceView
+{
+    /// <summary>
+    /// A unique identifier for this ModuleSourceView.
+    /// </summary>
+    public ModuleSourceViewID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the view
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The patterns of the view used to filter paths
+    /// </summary>
+    public IEnumerable<string> Patterns() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ModuleSourceViewID` scalar type represents an identifier for an object of type ModuleSourceView.
+/// </summary>
+public struct ModuleSourceViewID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ModuleSourceViewID value) => value.Value;
+    public static implicit operator ModuleSourceViewID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Transport layer network protocol associated to a port.
+/// </summary>
+public enum NetworkProtocol
+{
+    //
+    TCP,
+
+    //
+    UDP,
+}
+
+/// <summary>
+/// A definition of a custom object defined in a Module.
+/// </summary>
+public class ObjectTypeDef
+{
+    /// <summary>
+    /// The function used to construct new instances of this object, if any
+    /// </summary>
+    public Function Constructor() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The doc string for the object, if any.
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Static fields defined on this object, if any.
+    /// </summary>
+    public IEnumerable<FieldTypeDef> Fields() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Functions defined on this object, if any.
+    /// </summary>
+    public IEnumerable<Function> Functions() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this ObjectTypeDef.
+    /// </summary>
+    public ObjectTypeDefID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the object.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If this ObjectTypeDef is associated with a Module, the name of the module. Unset otherwise.
+    /// </summary>
+    public string SourceModuleName() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ObjectTypeDefID` scalar type represents an identifier for an object of type ObjectTypeDef.
+/// </summary>
+public struct ObjectTypeDefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ObjectTypeDefID value) => value.Value;
+    public static implicit operator ObjectTypeDefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Key value object that represents a pipeline label.
+/// </summary>
+public class PipelineLabel
+{
+    /// <summary>
+    /// Label name.
+    /// </summary>
+    public string Name;
+
+    /// <summary>
+    /// Label value.
+    /// </summary>
+    public string Value;
+}
+
+/// <summary>
+/// The platform config OS and architecture in a Container. The format is [os]/[platform]/[version] (e.g., "darwin/arm64/v7", "windows/amd64", "linux/arm64").
+/// </summary>
+public struct Platform
+{
+    public string Value { get; init; }
+    public static implicit operator string(Platform value) => value.Value;
+    public static implicit operator Platform(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A port exposed by a container.
+/// </summary>
+public class Port
+{
+    /// <summary>
+    /// The port description.
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Skip the health check when run as a service.
+    /// </summary>
+    public bool ExperimentalSkipHealthcheck() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this Port.
+    /// </summary>
+    public PortID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The port number.
+    /// </summary>
+    public int Port() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The transport layer protocol.
+    /// </summary>
+    public NetworkProtocol Protocol() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Port forwarding rules for tunneling network traffic.
+/// </summary>
+public class PortForward
+{
+    /// <summary>
+    /// Port to expose to clients. If unspecified, a default will be chosen.
+    /// </summary>
+    public int Frontend;
+
+    /// <summary>
+    /// Destination port for traffic.
+    /// </summary>
+    public int Backend;
+
+    /// <summary>
+    /// Transport layer protocol to use for traffic.
+    /// </summary>
+    public NetworkProtocol Protocol;
+}
+
+/// <summary>
+/// The `PortID` scalar type represents an identifier for an object of type Port.
+/// </summary>
+public struct PortID
+{
+    public string Value { get; init; }
+    public static implicit operator string(PortID value) => value.Value;
+    public static implicit operator PortID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The root of the DAG.
+/// </summary>
+public class Query
+{
+    /// <summary>
+    /// Retrieves a content-addressed blob.
+    /// </summary>
+    /// <param name="digest">Digest of the blob</param>
+    /// <param name="size">Size of the blob</param>
+    /// <param name="mediaType">Media type of the blob</param>
+    /// <param name="uncompressed">Digest of the uncompressed blob</param>
+    public Directory Blob(string digest, int size, string mediaType, string uncompressed) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves a container builtin to the engine.
+    /// </summary>
+    /// <param name="digest">Digest of the image manifest</param>
+    public Container BuiltinContainer(string digest) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Constructs a cache volume for a given cache key.
+    /// </summary>
+    /// <param name="key">A string identifier to target this cache volume (e.g., "modules-cache").</param>
+    public CacheVolume CacheVolume(string key) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Checks if the current Dagger Engine is compatible with an SDK's required version.
+    /// </summary>
+    /// <param name="version">Version required by the SDK.</param>
+    public bool CheckVersionCompatibility(string version) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a scratch container. Optional platform argument initializes new containers to execute and publish as that platform. Platform defaults to that of the builder's host.
+    /// </summary>
+    /// <param name="id">DEPRECATED: Use `loadContainerFromID` instead.</param>
+    /// <param name="platform">Platform to initialize the container with.</param>
+    public Container Container(ContainerID id, Platform platform) => throw new NotImplementedException();
+
+    /// <summary>
+    /// The FunctionCall context that the SDK caller is currently executing in. If the caller is not currently executing in a function, this will return an error.
+    /// </summary>
+    public FunctionCall CurrentFunctionCall() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The module currently being served in the session, if any.
+    /// </summary>
+    public CurrentModule CurrentModule() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The TypeDef representations of the objects currently being served in the session.
+    /// </summary>
+    public IEnumerable<TypeDef> CurrentTypeDefs() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The default platform of the engine.
+    /// </summary>
+    public Platform DefaultPlatform() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates an empty directory.
+    /// </summary>
+    /// <param name="id">DEPRECATED: Use `loadDirectoryFromID` instead.</param>
+    public Directory Directory(DirectoryID id) => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="id"></param>
+    public File File(FileID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a function.
+    /// </summary>
+    /// <param name="name">Name of the function, in its original format from the implementation language.</param>
+    /// <param name="returnType">Return type of the function.</param>
+    public Function Function(string name, TypeDefID returnType) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Create a code generation result, given a directory containing the generated code.
+    /// </summary>
+    /// <param name="code"></param>
+    public GeneratedCode GeneratedCode(DirectoryID code) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Queries a Git repository.
+    /// </summary>
+    /// <param name="url">URL of the git repository. Can be formatted as `https://{host}/{owner}/{repo}`, `git@{host}:{owner}/{repo}`. Suffix ".git" is optional.</param>
+    /// <param name="keepGitDir">Set to true to keep .git directory.</param>
+    /// <param name="experimentalServiceHost">A service which must be started before the repo is fetched.</param>
+    /// <param name="sshKnownHosts">Set SSH known hosts</param>
+    /// <param name="sshAuthSocket">Set SSH auth socket</param>
+    public GitRepository Git(string url, bool keepGitDir = false, ServiceID experimentalServiceHost, string sshKnownHosts = "", SocketID sshAuthSocket) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Queries the host environment.
+    /// </summary>
+    public Host Host() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a file containing an http remote url content.
+    /// </summary>
+    /// <param name="url">HTTP url to get the content from (e.g., "https://docs.dagger.io").</param>
+    /// <param name="experimentalServiceHost">A service which must be started before the URL is fetched.</param>
+    public File Http(string url, ServiceID experimentalServiceHost) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a CacheVolume from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public CacheVolume LoadCacheVolumeFromID(CacheVolumeID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Container from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Container LoadContainerFromID(ContainerID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a CurrentModule from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public CurrentModule LoadCurrentModuleFromID(CurrentModuleID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Directory from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Directory LoadDirectoryFromID(DirectoryID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a EnvVariable from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public EnvVariable LoadEnvVariableFromID(EnvVariableID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a FieldTypeDef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public FieldTypeDef LoadFieldTypeDefFromID(FieldTypeDefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a File from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public File LoadFileFromID(FileID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a FunctionArg from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public FunctionArg LoadFunctionArgFromID(FunctionArgID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a FunctionCallArgValue from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public FunctionCallArgValue LoadFunctionCallArgValueFromID(FunctionCallArgValueID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a FunctionCall from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public FunctionCall LoadFunctionCallFromID(FunctionCallID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Function from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Function LoadFunctionFromID(FunctionID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a GeneratedCode from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public GeneratedCode LoadGeneratedCodeFromID(GeneratedCodeID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a GitModuleSource from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public GitModuleSource LoadGitModuleSourceFromID(GitModuleSourceID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a GitRef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public GitRef LoadGitRefFromID(GitRefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a GitRepository from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public GitRepository LoadGitRepositoryFromID(GitRepositoryID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Host from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Host LoadHostFromID(HostID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a InputTypeDef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public InputTypeDef LoadInputTypeDefFromID(InputTypeDefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a InterfaceTypeDef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public InterfaceTypeDef LoadInterfaceTypeDefFromID(InterfaceTypeDefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Label from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Label LoadLabelFromID(LabelID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a ListTypeDef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public ListTypeDef LoadListTypeDefFromID(ListTypeDefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a LocalModuleSource from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public LocalModuleSource LoadLocalModuleSourceFromID(LocalModuleSourceID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a ModuleDependency from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public ModuleDependency LoadModuleDependencyFromID(ModuleDependencyID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Module from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Module LoadModuleFromID(ModuleID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a ModuleSource from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public ModuleSource LoadModuleSourceFromID(ModuleSourceID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a ModuleSourceView from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public ModuleSourceView LoadModuleSourceViewFromID(ModuleSourceViewID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a ObjectTypeDef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public ObjectTypeDef LoadObjectTypeDefFromID(ObjectTypeDefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Port from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Port LoadPortFromID(PortID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a ScalarTypeDef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public ScalarTypeDef LoadScalarTypeDefFromID(ScalarTypeDefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Secret from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Secret LoadSecretFromID(SecretID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Service from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Service LoadServiceFromID(ServiceID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Socket from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Socket LoadSocketFromID(SocketID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a Terminal from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Terminal LoadTerminalFromID(TerminalID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Load a TypeDef from its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public TypeDef LoadTypeDefFromID(TypeDefID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Create a new module.
+    /// </summary>
+    public Module Module() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Create a new module dependency configuration from a module source and name
+    /// </summary>
+    /// <param name="source">The source of the dependency</param>
+    /// <param name="name">If set, the name to use for the dependency. Otherwise, once installed to a parent module, the name of the dependency module will be used by default.</param>
+    public ModuleDependency ModuleDependency(ModuleSourceID source, string name = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Create a new module source instance from a source ref string.
+    /// </summary>
+    /// <param name="refString">The string ref representation of the module source</param>
+    /// <param name="stable">If true, enforce that the source is a stable version for source kinds that support versioning.</param>
+    public ModuleSource ModuleSource(string refString, bool stable = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a named sub-pipeline.
+    /// </summary>
+    /// <param name="name">Name of the sub-pipeline.</param>
+    /// <param name="description">Description of the sub-pipeline.</param>
+    /// <param name="labels">Labels to apply to the sub-pipeline.</param>
+    public Query Pipeline(string name, string description = "", IEnumerable<PipelineLabel>? labels) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Reference a secret by name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="accessor"></param>
+    public Secret Secret(string name, string accessor) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Sets a secret given a user defined name to its plaintext and returns the secret. The plaintext value is limited to a size of 128000 bytes.
+    /// </summary>
+    /// <param name="name">The user defined name for this secret</param>
+    /// <param name="plaintext">The plaintext of the secret</param>
+    public Secret SetSecret(string name, string plaintext) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Loads a socket by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    public Socket Socket(SocketID id) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Create a new TypeDef.
+    /// </summary>
+    public TypeDef TypeDef() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Get the current Dagger Engine version.
+    /// </summary>
+    public string Version() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// A definition of a custom scalar defined in a Module.
+/// </summary>
+public class ScalarTypeDef
+{
+    /// <summary>
+    /// A doc string for the scalar, if any.
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this ScalarTypeDef.
+    /// </summary>
+    public ScalarTypeDefID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of the scalar.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If this ScalarTypeDef is associated with a Module, the name of the module. Unset otherwise.
+    /// </summary>
+    public string SourceModuleName() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ScalarTypeDefID` scalar type represents an identifier for an object of type ScalarTypeDef.
+/// </summary>
+public struct ScalarTypeDefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ScalarTypeDefID value) => value.Value;
+    public static implicit operator ScalarTypeDefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A reference to a secret value, which can be handled more safely than the value itself.
+/// </summary>
+public class Secret
+{
+    /// <summary>
+    /// A unique identifier for this Secret.
+    /// </summary>
+    public SecretID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The name of this secret.
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The value of this secret.
+    /// </summary>
+    public string Plaintext() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `SecretID` scalar type represents an identifier for an object of type Secret.
+/// </summary>
+public struct SecretID
+{
+    public string Value { get; init; }
+    public static implicit operator string(SecretID value) => value.Value;
+    public static implicit operator SecretID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A content-addressed service providing TCP connectivity.
+/// </summary>
+public class Service
+{
+    /// <summary>
+    /// Retrieves an endpoint that clients can use to reach this container. If no port is specified, the first exposed port is used. If none exist an error is returned. If a scheme is specified, a URL is returned. Otherwise, a host:port pair is returned.
+    /// </summary>
+    /// <param name="port">The exposed port number for the endpoint</param>
+    /// <param name="scheme">Return a URL with the given scheme, eg. http for http://</param>
+    public string Endpoint(int port, string scheme = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves a hostname which can be used by clients to reach this container.
+    /// </summary>
+    public string Hostname() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this Service.
+    /// </summary>
+    public ServiceID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Retrieves the list of ports provided by the service.
+    /// </summary>
+    public IEnumerable<Port> Ports() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Start the service and wait for its health checks to succeed. Services bound to a Container do not need to be manually started.
+    /// </summary>
+    public ServiceID Start() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Stop the service.
+    /// </summary>
+    /// <param name="kill">Immediately kill the service without waiting for a graceful exit</param>
+    public ServiceID Stop(bool kill = false) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Creates a tunnel that forwards traffic from the caller's network to this service.
+    /// </summary>
+    /// <param name="ports">List of frontend/backend port mappings to forward. Frontend is the port accepting traffic on the host, backend is the service port.</param>
+    /// <param name="random">Bind each tunnel port to a random port on the host.</param>
+    public Void Up(IEnumerable<PortForward>? ports = null, bool random = false) => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `ServiceID` scalar type represents an identifier for an object of type Service.
+/// </summary>
+public struct ServiceID
+{
+    public string Value { get; init; }
+    public static implicit operator string(ServiceID value) => value.Value;
+    public static implicit operator ServiceID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A Unix or TCP/IP socket that can be mounted into a container.
+/// </summary>
+public class Socket
+{
+    /// <summary>
+    /// A unique identifier for this Socket.
+    /// </summary>
+    public SocketID Id() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `SocketID` scalar type represents an identifier for an object of type Socket.
+/// </summary>
+public struct SocketID
+{
+    public string Value { get; init; }
+    public static implicit operator string(SocketID value) => value.Value;
+    public static implicit operator SocketID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+/// </summary>
+public struct String
+{
+    public string Value { get; init; }
+    public static implicit operator string(String value) => value.Value;
+    public static implicit operator String(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// An interactive terminal that clients can connect to.
+/// </summary>
+public class Terminal
+{
+    /// <summary>
+    /// A unique identifier for this Terminal.
+    /// </summary>
+    public TerminalID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// An http endpoint at which this terminal can be connected to over a websocket.
+    /// </summary>
+    public string WebsocketEndpoint() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `TerminalID` scalar type represents an identifier for an object of type Terminal.
+/// </summary>
+public struct TerminalID
+{
+    public string Value { get; init; }
+    public static implicit operator string(TerminalID value) => value.Value;
+    public static implicit operator TerminalID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A definition of a parameter or return type in a Module.
+/// </summary>
+public class TypeDef
+{
+    /// <summary>
+    /// If kind is INPUT, the input-specific type definition. If kind is not INPUT, this will be null.
+    /// </summary>
+    public InputTypeDef AsInput() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If kind is INTERFACE, the interface-specific type definition. If kind is not INTERFACE, this will be null.
+    /// </summary>
+    public InterfaceTypeDef AsInterface() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If kind is LIST, the list-specific type definition. If kind is not LIST, this will be null.
+    /// </summary>
+    public ListTypeDef AsList() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If kind is OBJECT, the object-specific type definition. If kind is not OBJECT, this will be null.
+    /// </summary>
+    public ObjectTypeDef AsObject() => throw new NotImplementedException();
+
+    /// <summary>
+    /// If kind is SCALAR, the scalar-specific type definition. If kind is not SCALAR, this will be null.
+    /// </summary>
+    public ScalarTypeDef AsScalar() => throw new NotImplementedException();
+
+    /// <summary>
+    /// A unique identifier for this TypeDef.
+    /// </summary>
+    public TypeDefID Id() => throw new NotImplementedException();
+
+    /// <summary>
+    /// The kind of type this is (e.g. primitive, list, object).
+    /// </summary>
+    public TypeDefKind Kind() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Whether this type can be set to null. Defaults to false.
+    /// </summary>
+    public bool Optional() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Adds a function for constructing a new instance of an Object TypeDef, failing if the type is not an object.
+    /// </summary>
+    /// <param name="function"></param>
+    public TypeDef WithConstructor(FunctionID function) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Adds a static field for an Object TypeDef, failing if the type is not an object.
+    /// </summary>
+    /// <param name="name">The name of the field in the object</param>
+    /// <param name="typeDef">The type of the field</param>
+    /// <param name="description">A doc string for the field, if any</param>
+    public TypeDef WithField(string name, TypeDefID typeDef, string description = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Adds a function for an Object or Interface TypeDef, failing if the type is not one of those kinds.
+    /// </summary>
+    /// <param name="function"></param>
+    public TypeDef WithFunction(FunctionID function) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a TypeDef of kind Interface with the provided name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    public TypeDef WithInterface(string name, string description = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Sets the kind of the type.
+    /// </summary>
+    /// <param name="kind"></param>
+    public TypeDef WithKind(TypeDefKind kind) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a TypeDef of kind List with the provided type for its elements.
+    /// </summary>
+    /// <param name="elementType"></param>
+    public TypeDef WithListOf(TypeDefID elementType) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a TypeDef of kind Object with the provided name. Note that an object's fields and functions may be omitted if the intent is only to refer to an object. This is how functions are able to return their own object, or any other circular reference.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    public TypeDef WithObject(string name, string description = "") => throw new NotImplementedException();
+
+    /// <summary>
+    /// Sets whether this type can be set to null.
+    /// </summary>
+    /// <param name="optional"></param>
+    public TypeDef WithOptional(bool optional) => throw new NotImplementedException();
+
+    /// <summary>
+    /// Returns a TypeDef of kind Scalar with the provided name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    public TypeDef WithScalar(string name, string description = "") => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The `TypeDefID` scalar type represents an identifier for an object of type TypeDef.
+/// </summary>
+public struct TypeDefID
+{
+    public string Value { get; init; }
+    public static implicit operator string(TypeDefID value) => value.Value;
+    public static implicit operator TypeDefID(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// Distinguishes the different kinds of TypeDefs.
+/// </summary>
+public enum TypeDefKind
+{
+    // A string value.
+    STRING_KIND,
+
+    // An integer value.
+    INTEGER_KIND,
+
+    // A boolean value.
+    BOOLEAN_KIND,
+
+    // A scalar value of any basic kind.
+    SCALAR_KIND,
+
+    // A list of values all having the same type. Always paired with a ListTypeDef.
+    LIST_KIND,
+
+    // A named type defined in the GraphQL schema, with fields and functions. Always paired with an ObjectTypeDef.
+    OBJECT_KIND,
+
+    // A named type of functions that can be matched+implemented by other objects+interfaces. Always paired with an InterfaceTypeDef.
+    INTERFACE_KIND,
+
+    // A graphql input type, used only when representing the core API via TypeDefs.
+    INPUT_KIND,
+
+    // A special kind used to signify that no value is returned. This is used for functions that have no return value. The outer TypeDef specifying this Kind is always Optional, as the Void is never actually represented.
+    VOID_KIND,
+}
+
+/// <summary>
+/// The absence of a value. A Null Void is used as a placeholder for resolvers that do not return anything.
+/// </summary>
+public struct Void
+{
+    public string Value { get; init; }
+    public static implicit operator string(Void value) => value.Value;
+    public static implicit operator Void(string value) => new() { Value = value };
+}
+
+/// <summary>
+/// A GraphQL schema directive.
+/// </summary>
+public class __Directive
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__InputValue> Args() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__DirectiveLocation> Locations() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// A location that a directive may be applied.
+/// </summary>
+public enum __DirectiveLocation
+{
+    //
+    QUERY,
+
+    //
+    MUTATION,
+
+    //
+    SUBSCRIPTION,
+
+    //
+    FIELD,
+
+    //
+    FRAGMENT_DEFINITION,
+
+    //
+    FRAGMENT_SPREAD,
+
+    //
+    INLINE_FRAGMENT,
+
+    //
+    VARIABLE_DEFINITION,
+
+    //
+    SCHEMA,
+
+    //
+    SCALAR,
+
+    //
+    OBJECT,
+
+    //
+    FIELD_DEFINITION,
+
+    //
+    ARGUMENT_DEFINITION,
+
+    //
+    INTERFACE,
+
+    //
+    UNION,
+
+    //
+    ENUM,
+
+    //
+    ENUM_VALUE,
+
+    //
+    INPUT_OBJECT,
+
+    //
+    INPUT_FIELD_DEFINITION,
+}
+
+/// <summary>
+/// A possible value of a GraphQL enum.
+/// </summary>
+public class __EnumValue
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public string DeprecationReason() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public bool IsDeprecated() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// A GraphQL object or input field.
+/// </summary>
+public class __Field
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__InputValue> Args() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string DeprecationReason() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public bool IsDeprecated() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public __Type Type() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// A GraphQL schema input field or argument.
+/// </summary>
+public class __InputValue
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public string DefaultValue() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string DeprecationReason() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public bool IsDeprecated() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public __Type Type() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// A GraphQL schema definition.
+/// </summary>
+public class __Schema
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__Directive> Directives() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public __Type MutationType() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public __Type QueryType() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public __Type SubscriptionType() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__Type> Types() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// A GraphQL schema type.
+/// </summary>
+public class __Type
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public string Description() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="includeDeprecated"></param>
+    public IEnumerable<__EnumValue> EnumValues(bool includeDeprecated = false) => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="includeDeprecated"></param>
+    public IEnumerable<__Field> Fields(bool includeDeprecated = false) => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__InputValue> InputFields() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__Type> Interfaces() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public __TypeKind Kind() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string Name() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public __Type OfType() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public IEnumerable<__Type> PossibleTypes() => throw new NotImplementedException();
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string SpecifiedByURL() => throw new NotImplementedException();
+}
+
+/// <summary>
+/// The kind of a GraphQL type.
+/// </summary>
+public enum __TypeKind
+{
+    //
+    SCALAR,
+
+    //
+    OBJECT,
+
+    //
+    INTERFACE,
+
+    //
+    UNION,
+
+    //
+    ENUM,
+
+    //
+    INPUT_OBJECT,
+
+    //
+    LIST,
+
+    //
+    NON_NULL,
 }

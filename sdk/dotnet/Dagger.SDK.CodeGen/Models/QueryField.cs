@@ -7,5 +7,5 @@ public class QueryField
     public string? Description { get; set; }
     public bool IsDeprecated { get; set; }
     public string? Name { get; set; }
-    public ArgType? Type { get; set; }
+    public TypeDef? Type { get; set; }
 }
